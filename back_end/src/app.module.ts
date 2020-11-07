@@ -1,13 +1,18 @@
-import { Module } from '@nestjs/common';
-import { GraphQLModule } from '@nestjs/graphql';
-import { RestaurantsModule } from './restaurants/restaurants.module';
+import { Module } from "@nestjs/common";
+import { ConfigModule } from "@nestjs/config";
+import { GraphQLModule } from "@nestjs/graphql";
+import { RestaurantsModule } from "./restaurants/restaurants.module";
 
 @Module({
   imports: [
-    GraphQLModule.forRoot({
-      autoSchemaFile: true
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: process.env.NODE_ENV === "dev" ? ".env.dev" : ".env.test",
     }),
-    RestaurantsModule
+    GraphQLModule.forRoot({
+      autoSchemaFile: true,
+    }),
+    RestaurantsModule,
   ],
   controllers: [],
   providers: [],

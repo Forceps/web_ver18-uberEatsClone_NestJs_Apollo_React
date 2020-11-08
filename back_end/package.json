@@ -10,7 +10,7 @@
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "prism": "prisma introspect && prisma generate",
-    "dev": "cross-env ENV=dev nest start --watch",
+    "dev": "cross-env NODE_ENV=dev nest start --watch",
     "start": "nest start",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
@@ -34,6 +34,7 @@
     "cross-env": "^7.0.2",
     "graphql": "^15.4.0",
     "graphql-tool": "^1.0.0",
+    "joi": "^17.3.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^6.5.4"

@@ -7,8 +7,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model user {
-  user_id Int    @id @default(autoincrement())
-  name    String
-  email   String @unique
+model restaurant {
+  restaurant_id Int    @id @default(autoincrement())
+  name          String
+  isVegan       Int
+  address       String
+  ownerName     String
+  categoryName  String
 }

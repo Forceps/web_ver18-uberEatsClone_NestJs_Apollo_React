@@ -1,9 +1,12 @@
 CREATE SCHEMA nuber_eats;
 
-CREATE TABLE `nuber_eats`.`user` (
-  `user_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(60) NOT NULL,
-  `email` VARCHAR(60) NOT NULL,
-  PRIMARY KEY (`user_id`),
-  UNIQUE INDEX `user_id_UNIQUE` (`user_id` ASC) VISIBLE,
-  UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE);
+CREATE TABLE `restaurant` (
+  `restaurant_id` int unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) NOT NULL,
+  `isVegan` tinyint NOT NULL,
+  `address` varchar(45) NOT NULL,
+  `ownerName` varchar(45) NOT NULL,
+  `categoryName` varchar(45) NOT NULL,
+  PRIMARY KEY (`restaurant_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+

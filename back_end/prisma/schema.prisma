@@ -10,7 +10,7 @@ datasource db {
 model restaurant {
   restaurant_id Int    @id @default(autoincrement())
   name          String
-  isVegan       Int
+  isVegan       Int    @default(1)
   address       String
   ownerName     String
   categoryName  String

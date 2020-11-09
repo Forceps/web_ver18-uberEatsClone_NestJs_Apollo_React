@@ -25,3 +25,11 @@ CREATE TABLE `nuber_eats`.`user` (
 
   
 
+
+
+
+// 2020-11-10
+
+ALTER TABLE `nuber_eats`.`user` 
+CHANGE COLUMN `createdAt` `createdAt` DATETIME NULL ,
+CHANGE COLUMN `updateAt` `updateAt` DATETIME NULL ;

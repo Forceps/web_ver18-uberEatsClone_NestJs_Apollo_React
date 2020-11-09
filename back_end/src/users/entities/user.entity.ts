@@ -1,4 +1,9 @@
-import { Field, InputType, ObjectType } from "@nestjs/graphql";
+import {
+  Field,
+  InputType,
+  ObjectType,
+  registerEnumType,
+} from "@nestjs/graphql";
 import { IsString, Length } from "class-validator";
 import { CoreEntity } from "src/globalLib/common/entities/core.entity";
 
@@ -15,10 +20,19 @@ export class user extends CoreEntity {
   @Length(2, 20)
   password: string;
 
-  @Field(() => String)
-  @IsString()
-  @Length(2, 15)
+  @Field(() => UserRole)
   role: UserRole;
 }
 
-type UserRole = "client" | "owner" | "delivery";
+enum UserRole {
+  client,
+  owner,
+  delivery,
+}
+export const UserRoleKind: ["client", "owner", "delivery"] = [
+  "client",
+  "owner",
+  "delivery",
+];
+
+registerEnumType(UserRole, { name: "UserRole" });

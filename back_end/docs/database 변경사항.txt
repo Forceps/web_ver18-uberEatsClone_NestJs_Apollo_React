@@ -13,12 +13,6 @@ CREATE TABLE nuber_eats.restaurant (
 ALTER TABLE nuber_eats.restaurant 
 CHANGE COLUMN isVegan isVegan TINYINT NULL ;
 
-
-
-
-// 2020-11-9
-
-
 CREATE TABLE `nuber_eats`.`user` (
   `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
   `createdAt` DATETIME NOT NULL,
@@ -30,3 +24,4 @@ CREATE TABLE `nuber_eats`.`user` (
   UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE);
 
   
+

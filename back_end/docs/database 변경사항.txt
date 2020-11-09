@@ -1,17 +1,32 @@
 CREATE SCHEMA nuber_eats;
 
-CREATE TABLE `restaurant` (
-  `restaurant_id` int unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) NOT NULL,
-  `isVegan` tinyint NOT NULL,
-  `address` varchar(45) NOT NULL,
-  `ownerName` varchar(45) NOT NULL,
-  `categoryName` varchar(45) NOT NULL,
-  PRIMARY KEY (`restaurant_id`)
+CREATE TABLE nuber_eats.restaurant (
+  restaurant_id int unsigned NOT NULL AUTO_INCREMENT,
+  name varchar(45) NOT NULL,
+  isVegan tinyint NOT NULL,
+  address varchar(45) NOT NULL,
+  ownerName varchar(45) NOT NULL,
+  categoryName varchar(45) NOT NULL,
+  PRIMARY KEY (restaurant_id)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-ALTER TABLE `nuber_eats`.`restaurant` 
-CHANGE COLUMN `isVegan` `isVegan` TINYINT NULL ;
+ALTER TABLE nuber_eats.restaurant 
+CHANGE COLUMN isVegan isVegan TINYINT NULL ;
 
 
 
+
+// 2020-11-9
+
+
+CREATE TABLE `nuber_eats`.`user` (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `createdAt` DATETIME NOT NULL,
+  `updateAt` DATETIME NOT NULL,
+  `email` VARCHAR(80) NOT NULL,
+  `password` VARCHAR(20) NOT NULL,
+  `role` ENUM("client", "owner", "delivery") NOT NULL DEFAULT 'client',
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE);
+
+  

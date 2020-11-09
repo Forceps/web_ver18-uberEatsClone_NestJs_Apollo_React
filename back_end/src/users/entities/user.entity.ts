@@ -1,34 +1,24 @@
 import { Field, InputType, ObjectType } from "@nestjs/graphql";
-import { IsNumber, IsOptional, IsString, Length } from "class-validator";
+import { IsString, Length } from "class-validator";
+import { CoreEntity } from "src/globalLib/common/entities/core.entity";
 
 @InputType({ isAbstract: true })
 @ObjectType()
-export class user {
-  @Field(() => Number)
-  restaurant_id: number;
+export class user extends CoreEntity {
+  @Field(() => String)
+  @IsString()
+  @Length(2, 80)
+  email: string;
 
   @Field(() => String)
   @IsString()
-  @Length(2, 45)
-  name: string;
-
-  @Field(() => Number, { nullable: true })
-  @IsOptional()
-  @IsNumber()
-  isVegan: number;
+  @Length(2, 20)
+  password: string;
 
   @Field(() => String)
   @IsString()
-  @Length(2, 45)
-  address: string;
-
-  @Field(() => String)
-  @IsString()
-  @Length(2, 45)
-  ownerName: string;
-
-  @Field(() => String)
-  @IsString()
-  @Length(2, 45)
-  categoryName: string;
+  @Length(2, 15)
+  role: UserRole;
 }
+
+type UserRole = "client" | "owner" | "delivery";

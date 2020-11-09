@@ -1,4 +1,9 @@
-import { Module } from '@nestjs/common';
+import { Module } from "@nestjs/common";
+import { PrismaService } from "src/globalLib/prisma.service";
+import { UsersResolver } from "./users.resolver";
+import { UsersService } from "./users.service";
 
-@Module({})
+@Module({
+  providers: [PrismaService, UsersResolver, UsersService],
+})
 export class UsersModule {}

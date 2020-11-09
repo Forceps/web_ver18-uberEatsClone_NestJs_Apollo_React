@@ -10,8 +10,23 @@ datasource db {
 model restaurant {
   restaurant_id Int    @id @default(autoincrement())
   name          String
-  isVegan       Int    @default(1)
+  isVegan       Int?
   address       String
   ownerName     String
   categoryName  String
+}
+
+model user {
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime
+  updateAt  DateTime
+  email     String    @unique
+  password  String
+  role      user_role @default(client)
+}
+
+enum user_role {
+  client
+  owner
+  delivery
 }

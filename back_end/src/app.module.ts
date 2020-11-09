@@ -3,6 +3,7 @@ import * as Joi from "joi";
 import { ConfigModule } from "@nestjs/config";
 import { GraphQLModule } from "@nestjs/graphql";
 import { RestaurantsModule } from "./restaurants/restaurants.module";
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { RestaurantsModule } from "./restaurants/restaurants.module";
       autoSchemaFile: true,
     }),
     RestaurantsModule,
+    UsersModule,
   ],
   controllers: [],
   providers: [],

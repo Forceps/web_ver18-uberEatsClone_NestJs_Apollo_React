@@ -27,3 +27,12 @@ ALTER TABLE `nuber_eats`.`user`
 CHANGE COLUMN `createdAt` `createdAt` DATETIME NULL ,
 CHANGE COLUMN `updateAt` `updateAt` DATETIME NULL ;
 
+
+
+
+
+
+// 2020-11-11
+
+ALTER TABLE `nuber_eats`.`user` 
+CHANGE COLUMN `password` `password` VARCHAR(70) NOT NULL ;

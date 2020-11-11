@@ -14,6 +14,7 @@ import { CommonModule } from "./globalLib/common/common.module";
       ignoreEnvFile: process.env.NODE_ENV === "prod",
       validationSchema: Joi.object({
         NODE_ENV: Joi.string().valid("dev", "prod").required(),
+        SECRET_KEY: Joi.string().required(),
       }),
     }),
     GraphQLModule.forRoot({

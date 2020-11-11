@@ -5,6 +5,7 @@ import { GraphQLModule } from "@nestjs/graphql";
 import { RestaurantsModule } from "./restaurants/restaurants.module";
 import { UsersModule } from "./users/users.module";
 import { CommonModule } from "./globalLib/common/common.module";
+import { JwtModule } from "./jwt/jwt.module";
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { CommonModule } from "./globalLib/common/common.module";
     RestaurantsModule,
     UsersModule,
     CommonModule,
+    JwtModule.forRoot(),
   ],
   controllers: [],
   providers: [],

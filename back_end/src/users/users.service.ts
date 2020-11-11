@@ -3,6 +3,7 @@ import { ConfigService } from "@nestjs/config";
 import { compare, hash } from "bcrypt";
 import { sign } from "jsonwebtoken";
 import { PrismaService } from "src/globalLib/prisma.service";
+import { JwtService } from "src/jwt/jwt.service";
 import { CreateAccountInput } from "./dtos/create-account.dto";
 import { LoginInput } from "./dtos/login.dto";
 import { UserRoleKind } from "./entities/user.entity";
@@ -11,7 +12,8 @@ import { UserRoleKind } from "./entities/user.entity";
 export class UsersService {
   constructor(
     private prisma: PrismaService,
-    private readonly config: ConfigService
+    private readonly config: ConfigService,
+    private readonly jwtService: JwtService
   ) {}
 
   async createAccount({
@@ -65,7 +67,7 @@ export class UsersService {
       const token = sign({ id: user.id }, this.config.get("SECRET_KEY"));
       return {
         ok: true,
-        token: "lalalalala",
+        token,
       };
     } catch (e) {
       return {

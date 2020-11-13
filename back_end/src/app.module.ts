@@ -15,7 +15,7 @@ import { JwtModule } from "./jwt/jwt.module";
       ignoreEnvFile: process.env.NODE_ENV === "prod",
       validationSchema: Joi.object({
         NODE_ENV: Joi.string().valid("dev", "prod").required(),
-        SECRET_KEY: Joi.string().required(),
+        PRIVATE_KEY: Joi.string().required(),
       }),
     }),
     GraphQLModule.forRoot({
@@ -24,7 +24,9 @@ import { JwtModule } from "./jwt/jwt.module";
     RestaurantsModule,
     UsersModule,
     CommonModule,
-    JwtModule.forRoot(),
+    JwtModule.forRoot({
+      privateKey: process.env.PRIVATE_KEY,
+    }),
   ],
   controllers: [],
   providers: [],

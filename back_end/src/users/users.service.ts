@@ -1,7 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
 import { compare, hash } from "bcrypt";
-import { sign } from "jsonwebtoken";
 import { PrismaService } from "src/globalLib/prisma.service";
 import { JwtService } from "src/jwt/jwt.service";
 import { CreateAccountInput } from "./dtos/create-account.dto";
@@ -12,7 +10,6 @@ import { UserRoleKind } from "./entities/user.entity";
 export class UsersService {
   constructor(
     private prisma: PrismaService,
-    private readonly config: ConfigService,
     private readonly jwtService: JwtService
   ) {}
 
@@ -64,7 +61,7 @@ export class UsersService {
           error: "Wrong password",
         };
       }
-      const token = sign({ id: user.id }, this.config.get("SECRET_KEY"));
+      const token = this.jwtService.sign({ id: user.id });
       return {
         ok: true,
         token,

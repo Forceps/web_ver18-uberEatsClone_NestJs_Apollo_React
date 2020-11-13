@@ -14,18 +14,13 @@ ALTER TABLE nuber_eats.restaurant
 CHANGE COLUMN isVegan isVegan TINYINT NULL ;
 
 CREATE TABLE `nuber_eats`.`user` (
-  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `createdAt` DATETIME NOT NULL,
-  `updateAt` DATETIME NOT NULL,
-  `email` VARCHAR(80) NOT NULL,
-  `password` VARCHAR(20) NOT NULL,
-  `role` ENUM("client", "owner", "delivery") NOT NULL DEFAULT 'client',
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `createdAt` datetime DEFAULT NULL,
+  `updatedAt` datetime DEFAULT NULL,
+  `email` varchar(80) NOT NULL,
+  `password` varchar(70) NOT NULL,
+  `role` enum('client','owner','delivery') NOT NULL DEFAULT 'client',
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE);
+  UNIQUE KEY `email_UNIQUE` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-ALTER TABLE `nuber_eats`.`user` 
-CHANGE COLUMN `createdAt` `createdAt` DATETIME NULL ,
-CHANGE COLUMN `updateAt` `updateAt` DATETIME NULL ;
-
-ALTER TABLE `nuber_eats`.`user` 
-CHANGE COLUMN `password` `password` VARCHAR(70) NOT NULL ;

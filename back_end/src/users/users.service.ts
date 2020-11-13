@@ -1,4 +1,5 @@
 import { Injectable } from "@nestjs/common";
+import { user } from "@prisma/client";
 import { compare, hash } from "bcrypt";
 import { PrismaService } from "src/globalLib/prisma.service";
 import { JwtService } from "src/jwt/jwt.service";
@@ -72,5 +73,9 @@ export class UsersService {
         error: e,
       };
     }
+  }
+
+  async findById(id: number): Promise<user> {
+    return this.prisma.user.findOne({ where: { id } });
   }
 }

@@ -3,3 +3,11 @@
   "editor.defaultFormatter": "esbenp.prettier-vscode"
 
 이 입력되어 있는지 확인해보고 만약 없으면 추가할 것.
+
+
+2. graphql에서 로그인 상태 테스트 시 http header에 다음을 추가한다
+  {
+    "X-JWT": (jwt토큰...)
+  }
+
+

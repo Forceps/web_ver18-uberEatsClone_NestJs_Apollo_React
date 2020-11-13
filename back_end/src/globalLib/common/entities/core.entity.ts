@@ -1,14 +1,16 @@
 import { Field } from "@nestjs/graphql";
-import { IsNumber } from "class-validator";
+import { IsNumber, IsOptional } from "class-validator";
 
 export class CoreEntity {
   @Field(() => Number)
   @IsNumber()
   id: number;
 
-  @Field(() => Date)
+  @Field(() => Date, { nullable: true })
+  @IsOptional()
   createdAt: Date;
 
-  @Field(() => Date)
+  @Field(() => Date, { nullable: true })
+  @IsOptional()
   updatedAt: Date;
 }

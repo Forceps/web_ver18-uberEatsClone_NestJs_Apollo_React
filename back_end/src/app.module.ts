@@ -12,6 +12,7 @@ import { UsersModule } from "./users/users.module";
 import { CommonModule } from "./globalLib/common/common.module";
 import { JwtModule } from "./jwt/jwt.module";
 import { JwtMiddleware } from "./jwt/jwt.middleware";
+import { AuthModule } from "./auth/auth.module";
 
 @Module({
   imports: [
@@ -28,12 +29,11 @@ import { JwtMiddleware } from "./jwt/jwt.middleware";
       autoSchemaFile: true,
       context: ({ req }) => ({ user: req["user"] }),
     }),
-    RestaurantsModule,
-    UsersModule,
-    CommonModule,
     JwtModule.forRoot({
       privateKey: process.env.PRIVATE_KEY,
     }),
+    RestaurantsModule,
+    UsersModule,
   ],
   controllers: [],
   providers: [],

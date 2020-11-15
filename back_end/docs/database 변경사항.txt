@@ -24,3 +24,31 @@ CREATE TABLE `nuber_eats`.`user` (
   UNIQUE KEY `email_UNIQUE` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+
+
+
+
+
+
+
+// 2020-11-15
+
+ALTER TABLE `nuber_eats`.`user` 
+ADD COLUMN `verified` TINYINT UNSIGNED NOT NULL DEFAULT 0 AFTER `email`;
+
+CREATE TABLE `nuber_eats`.`verification` (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `createdAt` DATETIME NULL,
+  `updatedAt` DATETIME NULL,
+  `code` VARCHAR(45) NOT NULL,
+  `userId` BIGINT UNSIGNED NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `userId_UNIQUE` (`userId` ASC) VISIBLE,
+  CONSTRAINT `userId_to_verification`
+    FOREIGN KEY (`userId`)
+    REFERENCES `nuber_eats`.`user` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE);
+ALTER TABLE `nuber_eats`.`verification` 
+CHANGE COLUMN `code` `code` VARCHAR(25) NOT NULL ;
+

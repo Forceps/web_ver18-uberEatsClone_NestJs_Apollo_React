@@ -4,7 +4,6 @@ import { UsersResolver } from "./users.resolver";
 import { UsersService } from "./users.service";
 
 @Module({
-  imports: [],
   providers: [PrismaService, UsersResolver, UsersService],
   exports: [UsersService],
 })

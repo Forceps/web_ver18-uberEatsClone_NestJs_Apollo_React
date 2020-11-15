@@ -30,8 +30,20 @@ export class UsersService {
           password: await hash(password, 10),
           role,
         },
+        select: {
+          id: true,
+        },
       });
-      console.log(ret.id);
+      await this.prisma.verification.create({
+        data: {
+          code: Math.random().toString(36).substring(2),
+          user: {
+            connect: {
+              id: ret.id,
+            },
+          },
+        },
+      });
       return { ok: true };
     } catch (e) {
       console.log(e);
@@ -84,7 +96,15 @@ export class UsersService {
   ): Promise<user> {
     let updateUnit: object = {};
     if (email) {
-      updateUnit = { email };
+      updateUnit = { email, verified: 0 };
+      await this.prisma.verification.update({
+        where: {
+          userId,
+        },
+        data: {
+          code: Math.random().toString(36).substring(2),
+        },
+      });
     }
     if (password) {
       updateUnit = { ...updateUnit, password: await hash(password, 10) };
@@ -93,5 +113,21 @@ export class UsersService {
       where: { id: userId },
       data: updateUnit,
     });
+  }
+
+  async verifyEmail(userId: number, code: string): Promise<boolean> {
+    const verification = await this.prisma.verification.findOne({
+      where: {
+        userId,
+      },
+    });
+    if (code === verification.code) {
+      await this.prisma.user.update({
+        where: { id: userId },
+        data: { verified: 1 },
+      });
+      return true;
+    }
+    return false;
   }
 }

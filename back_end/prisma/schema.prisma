@@ -17,12 +17,23 @@ model restaurant {
 }
 
 model user {
+  id           Int           @id @default(autoincrement())
+  createdAt    DateTime?
+  updatedAt    DateTime?
+  email        String        @unique
+  verified     Int           @default(0)
+  password     String
+  role         user_role     @default(client)
+  verification verification?
+}
+
+model verification {
   id        Int       @id @default(autoincrement())
   createdAt DateTime?
-  updateAt  DateTime?
-  email     String    @unique
-  password  String
-  role      user_role @default(client)
+  updatedAt DateTime?
+  code      String
+  userId    Int       @unique
+  user      user      @relation(fields: [userId], references: [id])
 }
 
 enum user_role {

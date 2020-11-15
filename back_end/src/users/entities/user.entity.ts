@@ -4,7 +4,7 @@ import {
   ObjectType,
   registerEnumType,
 } from "@nestjs/graphql";
-import { IsEmail, IsEnum, IsString, Length } from "class-validator";
+import { IsBoolean, IsEmail, IsEnum, IsString, Length } from "class-validator";
 import { CoreEntity } from "src/globalLib/common/entities/core.entity";
 
 enum UserRole {
@@ -22,6 +22,10 @@ export class user extends CoreEntity {
   @IsEmail()
   @Length(2, 80)
   email: string;
+
+  @Field(() => Boolean)
+  @IsBoolean()
+  verified: boolean;
 
   @Field(() => String)
   @IsString()

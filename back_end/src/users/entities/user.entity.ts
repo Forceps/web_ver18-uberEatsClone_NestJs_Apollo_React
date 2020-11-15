@@ -8,15 +8,10 @@ import { IsEmail, IsEnum, IsString, Length } from "class-validator";
 import { CoreEntity } from "src/globalLib/common/entities/core.entity";
 
 enum UserRole {
-  client,
-  owner,
-  delivery,
+  client = "client",
+  owner = "owner",
+  delivery = "delivery",
 }
-export const UserRoleKind: ["client", "owner", "delivery"] = [
-  "client",
-  "owner",
-  "delivery",
-];
 
 registerEnumType(UserRole, { name: "UserRole" });
 
@@ -24,7 +19,7 @@ registerEnumType(UserRole, { name: "UserRole" });
 @ObjectType()
 export class user extends CoreEntity {
   @Field(() => String)
-  // @IsEmail()
+  @IsEmail()
   @Length(2, 80)
   email: string;
 

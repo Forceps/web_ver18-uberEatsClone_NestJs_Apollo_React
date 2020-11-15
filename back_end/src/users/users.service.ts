@@ -4,8 +4,8 @@ import { compare, hash } from "bcrypt";
 import { PrismaService } from "src/globalLib/prisma.service";
 import { JwtService } from "src/jwt/jwt.service";
 import { CreateAccountInput } from "./dtos/create-account.dto";
+import { EditProfileInput } from "./dtos/edit-profile.dto";
 import { LoginInput } from "./dtos/login.dto";
-import { UserRoleKind } from "./entities/user.entity";
 
 @Injectable()
 export class UsersService {
@@ -24,12 +24,11 @@ export class UsersService {
       if (exists) {
         return { ok: false, error: "There is a user with that email already." };
       }
-      const hashedPW = await hash(password, 10);
       const ret = await this.prisma.user.create({
         data: {
           email,
-          password: hashedPW,
-          role: UserRoleKind[role],
+          password: await hash(password, 10),
+          role,
         },
       });
       console.log(ret.id);
@@ -77,5 +76,22 @@ export class UsersService {
 
   async findById(id: number): Promise<user> {
     return this.prisma.user.findOne({ where: { id } });
+  }
+
+  async editProfile(
+    userId: number,
+    { email, password }: EditProfileInput
+  ): Promise<user> {
+    let updateUnit: object = {};
+    if (email) {
+      updateUnit = { email };
+    }
+    if (password) {
+      updateUnit = { ...updateUnit, password: await hash(password, 10) };
+    }
+    return this.prisma.user.update({
+      where: { id: userId },
+      data: updateUnit,
+    });
   }
 }

@@ -9,10 +9,8 @@ import { ConfigModule } from "@nestjs/config";
 import { GraphQLModule } from "@nestjs/graphql";
 import { RestaurantsModule } from "./restaurants/restaurants.module";
 import { UsersModule } from "./users/users.module";
-import { CommonModule } from "./globalLib/common/common.module";
 import { JwtModule } from "./jwt/jwt.module";
 import { JwtMiddleware } from "./jwt/jwt.middleware";
-import { AuthModule } from "./auth/auth.module";
 
 @Module({
   imports: [

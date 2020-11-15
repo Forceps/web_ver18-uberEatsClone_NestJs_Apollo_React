@@ -1,6 +1,7 @@
-import { Field } from "@nestjs/graphql";
+import { Field, ObjectType } from "@nestjs/graphql";
 import { IsNumber, IsOptional } from "class-validator";
 
+@ObjectType()
 export class CoreEntity {
   @Field(() => Number)
   @IsNumber()

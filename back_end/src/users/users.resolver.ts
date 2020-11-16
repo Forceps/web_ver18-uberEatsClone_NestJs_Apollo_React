@@ -53,6 +53,7 @@ export class UsersResolver {
   }
 
   @Mutation(() => VerifyEmailOutput)
+  @UseGuards(AuthGuard)
   verifyEmail(
     @AuthUser() authUser: user,
     @Args("input") { code }: VerifyEmailInput

@@ -25,27 +25,27 @@ export class UsersResolver {
 
   @Query(() => UserProfileOutput)
   @UseGuards(AuthGuard)
-  async userProfile(
+  userProfile(
     @Args() UserProfileInput: UserProfileInput
   ): Promise<UserProfileOutput> {
     return this.usersService.findById(UserProfileInput.userId);
   }
 
   @Mutation(() => CreateAccountOutput)
-  async createAccount(
+  createAccount(
     @Args("input") createAccountInput: CreateAccountInput
   ): Promise<CreateAccountOutput> {
     return this.usersService.createAccount(createAccountInput);
   }
 
   @Mutation(() => LoginOutput)
-  async login(@Args("input") loginInput: LoginInput): Promise<LoginOutput> {
+  login(@Args("input") loginInput: LoginInput): Promise<LoginOutput> {
     return this.usersService.login(loginInput);
   }
 
   @Mutation(() => EditProfileOutput)
   @UseGuards(AuthGuard)
-  async editProfile(
+  editProfile(
     @AuthUser() authUser: user,
     @Args("input") editProfileInput: EditProfileInput
   ): Promise<EditProfileOutput> {
@@ -53,7 +53,7 @@ export class UsersResolver {
   }
 
   @Mutation(() => VerifyEmailOutput)
-  async verifyEmail(
+  verifyEmail(
     @AuthUser() authUser: user,
     @Args("input") { code }: VerifyEmailInput
   ): Promise<VerifyEmailOutput> {

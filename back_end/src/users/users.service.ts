@@ -43,9 +43,7 @@ export class UsersService {
         data: {
           code: Math.random().toString(36).substring(2),
           user: {
-            connect: {
-              id: ret.id,
-            },
+            connect: { id: ret.id },
           },
         },
       });
@@ -97,10 +95,7 @@ export class UsersService {
           error: "user not found",
         };
       }
-      return {
-        ok: true,
-        user,
-      };
+      return { ok: true, user };
     } catch (e) {
       return {
         ok: false,
@@ -117,12 +112,10 @@ export class UsersService {
       let updateUnit: object = {};
       if (email) {
         updateUnit = { email, verified: 0 };
-        await this.prisma.verification.update({
-          where: {
-            userId,
-          },
+        await this.prisma.verification.create({
           data: {
             code: Math.random().toString(36).substring(2),
+            user: { connect: { id: userId } },
           },
         });
       }
@@ -133,9 +126,7 @@ export class UsersService {
         where: { id: userId },
         data: updateUnit,
       });
-      return {
-        ok: true,
-      };
+      return { ok: true };
     } catch (e) {
       return {
         ok: false,
@@ -144,31 +135,30 @@ export class UsersService {
     }
   }
 
-  async verifyEmail(userId: number, code: string): Promise<VerifyEmailOutput> {
+  async verifyEmail(
+    userId: number,
+    receivedCode: string
+  ): Promise<VerifyEmailOutput> {
     try {
-      const verification = await this.prisma.verification.findOne({
-        where: {
-          userId,
-        },
+      const { code, id } = await this.prisma.verification.findOne({
+        where: { userId },
       });
-      if (code === verification.code) {
+      if (receivedCode === code) {
         await this.prisma.user.update({
           where: { id: userId },
           data: { verified: 1 },
         });
-        return {
-          ok: true,
-        };
+        this.prisma.verification.delete({
+          where: { id },
+        });
+        return { ok: true };
       }
       return {
         ok: false,
         error: "Code does not match",
       };
     } catch (e) {
-      return {
-        ok: false,
-        error: e,
-      };
+      return { ok: false, error: e };
     }
   }
 }

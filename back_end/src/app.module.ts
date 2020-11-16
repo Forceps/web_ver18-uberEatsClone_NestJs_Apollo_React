@@ -11,6 +11,7 @@ import { RestaurantsModule } from "./restaurants/restaurants.module";
 import { UsersModule } from "./users/users.module";
 import { JwtModule } from "./jwt/jwt.module";
 import { JwtMiddleware } from "./jwt/jwt.middleware";
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { JwtMiddleware } from "./jwt/jwt.middleware";
     }),
     RestaurantsModule,
     UsersModule,
+    MailModule,
   ],
   controllers: [],
   providers: [],

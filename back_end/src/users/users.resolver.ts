@@ -28,47 +28,19 @@ export class UsersResolver {
   async userProfile(
     @Args() UserProfileInput: UserProfileInput
   ): Promise<UserProfileOutput> {
-    try {
-      const user = await this.usersService.findById(UserProfileInput.userId);
-      if (!user) {
-        throw Error();
-      }
-      return {
-        ok: true,
-        user,
-      };
-    } catch (e) {
-      return {
-        ok: false,
-        error: "user not found",
-      };
-    }
+    return this.usersService.findById(UserProfileInput.userId);
   }
 
   @Mutation(() => CreateAccountOutput)
   async createAccount(
     @Args("input") createAccountInput: CreateAccountInput
   ): Promise<CreateAccountOutput> {
-    try {
-      return this.usersService.createAccount(createAccountInput);
-    } catch (e) {
-      return {
-        ok: false,
-        error: e,
-      };
-    }
+    return this.usersService.createAccount(createAccountInput);
   }
 
   @Mutation(() => LoginOutput)
   async login(@Args("input") loginInput: LoginInput): Promise<LoginOutput> {
-    try {
-      return this.usersService.login(loginInput);
-    } catch (e) {
-      return {
-        ok: false,
-        error: e,
-      };
-    }
+    return this.usersService.login(loginInput);
   }
 
   @Mutation(() => EditProfileOutput)
@@ -77,18 +49,7 @@ export class UsersResolver {
     @AuthUser() authUser: user,
     @Args("input") editProfileInput: EditProfileInput
   ): Promise<EditProfileOutput> {
-    try {
-      console.log(editProfileInput);
-      await this.usersService.editProfile(authUser.id, editProfileInput);
-      return {
-        ok: true,
-      };
-    } catch (e) {
-      return {
-        ok: false,
-        error: e,
-      };
-    }
+    return this.usersService.editProfile(authUser.id, editProfileInput);
   }
 
   @Mutation(() => VerifyEmailOutput)
@@ -96,22 +57,6 @@ export class UsersResolver {
     @AuthUser() authUser: user,
     @Args("input") { code }: VerifyEmailInput
   ): Promise<VerifyEmailOutput> {
-    try {
-      const result = await this.usersService.verifyEmail(authUser.id, code);
-      if (result) {
-        return {
-          ok: true,
-        };
-      }
-      return {
-        ok: false,
-        error: "Code does not match",
-      };
-    } catch (e) {
-      return {
-        ok: false,
-        error: e,
-      };
-    }
+    return this.usersService.verifyEmail(authUser.id, code);
   }
 }

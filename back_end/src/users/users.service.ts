@@ -3,9 +3,14 @@ import { user } from "@prisma/client";
 import { compare, hash } from "bcrypt";
 import { PrismaService } from "src/globalLib/prisma.service";
 import { JwtService } from "src/jwt/jwt.service";
-import { CreateAccountInput } from "./dtos/create-account.dto";
-import { EditProfileInput } from "./dtos/edit-profile.dto";
-import { LoginInput } from "./dtos/login.dto";
+import {
+  CreateAccountInput,
+  CreateAccountOutput,
+} from "./dtos/create-account.dto";
+import { EditProfileInput, EditProfileOutput } from "./dtos/edit-profile.dto";
+import { LoginInput, LoginOutput } from "./dtos/login.dto";
+import { UserProfileOutput } from "./dtos/user-profile.dto";
+import { VerifyEmailOutput } from "./dtos/verify-email.dto";
 
 @Injectable()
 export class UsersService {
@@ -18,7 +23,7 @@ export class UsersService {
     email,
     password,
     role,
-  }: CreateAccountInput): Promise<{ ok: boolean; error?: string }> {
+  }: CreateAccountInput): Promise<CreateAccountOutput> {
     try {
       const exists = await this.prisma.user.findOne({ where: { email } });
       if (exists) {
@@ -54,10 +59,7 @@ export class UsersService {
     }
   }
 
-  async login({
-    email,
-    password,
-  }: LoginInput): Promise<{ ok: boolean; error?: string; token?: string }> {
+  async login({ email, password }: LoginInput): Promise<LoginOutput> {
     try {
       const user = await this.prisma.user.findOne({ where: { email } });
       if (!user) {
@@ -86,48 +88,87 @@ export class UsersService {
     }
   }
 
-  async findById(id: number): Promise<user> {
-    return this.prisma.user.findOne({ where: { id } });
+  async findById(id: number): Promise<UserProfileOutput> {
+    try {
+      const user = await this.prisma.user.findOne({ where: { id } });
+      if (!user) {
+        return {
+          ok: false,
+          error: "user not found",
+        };
+      }
+      return {
+        ok: true,
+        user,
+      };
+    } catch (e) {
+      return {
+        ok: false,
+        error: e,
+      };
+    }
   }
 
   async editProfile(
     userId: number,
     { email, password }: EditProfileInput
-  ): Promise<user> {
-    let updateUnit: object = {};
-    if (email) {
-      updateUnit = { email, verified: 0 };
-      await this.prisma.verification.update({
+  ): Promise<EditProfileOutput> {
+    try {
+      let updateUnit: object = {};
+      if (email) {
+        updateUnit = { email, verified: 0 };
+        await this.prisma.verification.update({
+          where: {
+            userId,
+          },
+          data: {
+            code: Math.random().toString(36).substring(2),
+          },
+        });
+      }
+      if (password) {
+        updateUnit = { ...updateUnit, password: await hash(password, 10) };
+      }
+      await this.prisma.user.update({
+        where: { id: userId },
+        data: updateUnit,
+      });
+      return {
+        ok: true,
+      };
+    } catch (e) {
+      return {
+        ok: false,
+        error: e,
+      };
+    }
+  }
+
+  async verifyEmail(userId: number, code: string): Promise<VerifyEmailOutput> {
+    try {
+      const verification = await this.prisma.verification.findOne({
         where: {
           userId,
         },
-        data: {
-          code: Math.random().toString(36).substring(2),
-        },
       });
+      if (code === verification.code) {
+        await this.prisma.user.update({
+          where: { id: userId },
+          data: { verified: 1 },
+        });
+        return {
+          ok: true,
+        };
+      }
+      return {
+        ok: false,
+        error: "Code does not match",
+      };
+    } catch (e) {
+      return {
+        ok: false,
+        error: e,
+      };
     }
-    if (password) {
-      updateUnit = { ...updateUnit, password: await hash(password, 10) };
-    }
-    return this.prisma.user.update({
-      where: { id: userId },
-      data: updateUnit,
-    });
-  }
-
-  async verifyEmail(userId: number, code: string): Promise<boolean> {
-    const verification = await this.prisma.verification.findOne({
-      where: {
-        userId,
-      },
-    });
-    if (code === verification.code) {
-      await this.prisma.user.update({
-        where: { id: userId },
-        data: { verified: 1 },
-      });
-      return true;
-    }
-    return false;
   }
 }

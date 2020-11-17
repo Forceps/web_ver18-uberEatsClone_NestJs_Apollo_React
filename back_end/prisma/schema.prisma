@@ -19,7 +19,7 @@ model restaurant {
 model user {
   id           Int           @id @default(autoincrement())
   createdAt    DateTime?
-  updatedAt    DateTime?
+  updateAt     DateTime?
   email        String        @unique
   verified     Int           @default(0)
   password     String

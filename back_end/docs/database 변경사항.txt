@@ -24,15 +24,6 @@ CREATE TABLE `nuber_eats`.`user` (
   UNIQUE KEY `email_UNIQUE` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-
-
-
-
-
-
-
-// 2020-11-15
-
 ALTER TABLE `nuber_eats`.`user` 
 ADD COLUMN `verified` TINYINT UNSIGNED NOT NULL DEFAULT 0 AFTER `email`;
 

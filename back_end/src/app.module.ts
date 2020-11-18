@@ -11,7 +11,8 @@ import { RestaurantsModule } from "./restaurants/restaurants.module";
 import { UsersModule } from "./users/users.module";
 import { JwtModule } from "./jwt/jwt.module";
 import { JwtMiddleware } from "./jwt/jwt.middleware";
-import { MailModule } from './mail/mail.module';
+import { MailModule } from "./mail/mail.module";
+import { PrismaService } from "./globalLib/prisma.service";
 
 @Module({
   imports: [
@@ -36,7 +37,7 @@ import { MailModule } from './mail/mail.module';
     MailModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [PrismaService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

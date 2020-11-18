@@ -1,4 +1,5 @@
 import { Test } from "@nestjs/testing";
+import { CONFIG_OPTIONS } from "src/globalLib/common/common.constants";
 import { PrismaService } from "src/globalLib/prisma.service";
 import { JwtService } from "src/jwt/jwt.service";
 import { UsersService } from "./users.service";
@@ -13,7 +14,10 @@ describe("UserService", () => {
         PrismaService,
         JwtService,
         {
-          provide: get,
+          provide: CONFIG_OPTIONS,
+          useValue: {
+            get: jest.fn(),
+          },
         },
       ],
     }).compile();

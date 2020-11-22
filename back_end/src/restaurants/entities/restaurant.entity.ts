@@ -10,7 +10,7 @@ export class restaurant extends CoreEntity {
   @Length(2, 45)
   name: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   @IsString()
   coverImg: string;
 

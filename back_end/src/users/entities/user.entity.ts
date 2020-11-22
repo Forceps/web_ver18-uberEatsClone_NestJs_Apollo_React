@@ -7,7 +7,7 @@ import {
 import { IsBoolean, IsEmail, IsEnum, IsString, Length } from "class-validator";
 import { CoreEntity } from "src/globalLib/common/entities/core.entity";
 
-enum UserRole {
+export enum UserRole {
   client = "client",
   owner = "owner",
   delivery = "delivery",

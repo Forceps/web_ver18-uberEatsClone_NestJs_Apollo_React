@@ -84,4 +84,9 @@ ADD CONSTRAINT `RestaurantOwner`
   ON UPDATE CASCADE;
 ALTER TABLE `nuber_eats`.`restaurant` 
 CHANGE COLUMN `restaurant_id` `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT ;
+ALTER TABLE `nuber_eats`.`category` 
+ADD COLUMN `slug` VARCHAR(45) NOT NULL AFTER `coverImg`,
+ADD UNIQUE INDEX `name_UNIQUE` (`name` ASC) VISIBLE,
+ADD UNIQUE INDEX `slug_UNIQUE` (`slug` ASC) VISIBLE;
+;
 

@@ -4,13 +4,18 @@ import { CoreEntity } from "src/globalLib/common/entities/core.entity";
 
 @InputType("CategoryInputType", { isAbstract: true })
 @ObjectType()
-export class restaurant extends CoreEntity {
+export class category extends CoreEntity {
   @Field(() => String)
   @IsString()
   @Length(2, 45)
   name: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   @IsString()
   coverImg: string;
+
+  @Field(() => String)
+  @IsString()
+  @Length(2, 45)
+  slug: string;
 }

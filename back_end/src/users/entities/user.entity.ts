@@ -15,7 +15,7 @@ enum UserRole {
 
 registerEnumType(UserRole, { name: "UserRole" });
 
-@InputType({ isAbstract: true })
+@InputType("UserInputType", { isAbstract: true })
 @ObjectType()
 export class user extends CoreEntity {
   @Field(() => String)

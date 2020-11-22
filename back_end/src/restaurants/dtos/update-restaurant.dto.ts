@@ -9,7 +9,7 @@ export class UpdateRestaurantInputType extends PartialType(
 @InputType()
 export class UpdateRestaurantDto {
   @Field(() => Number)
-  restaurant_id: number;
+  id: number;
 
   @Field(() => UpdateRestaurantInputType)
   data: UpdateRestaurantInputType;

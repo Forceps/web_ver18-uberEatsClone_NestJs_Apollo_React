@@ -8,22 +8,30 @@ datasource db {
 }
 
 model restaurant {
-  restaurant_id Int    @id @default(autoincrement())
-  name          String
-  isVegan       Int?
-  address       String
-  ownerName     String
-  categoryName  String
+  id                            Int       @id @default(autoincrement())
+  createdAt                     DateTime?
+  updatedAt                     DateTime?
+  name                          String
+  coverImg                      String?
+  address                       String
+  category                      Int?
+  owner                         Int
+  category_categoryTorestaurant category? @relation(fields: [category], references: [id])
+  user                          user      @relation(fields: [owner], references: [id])
+
+  @@index([category], name: "RestaurantCategory_idx")
+  @@index([owner], name: "RestaurantOwner_idx")
 }
 
 model user {
   id           Int           @id @default(autoincrement())
   createdAt    DateTime?
-  updateAt     DateTime?
+  updatedAt    DateTime?
   email        String        @unique
   verified     Int           @default(0)
   password     String
   role         user_role     @default(client)
+  restaurant   restaurant[]
   verification verification?
 }
 
@@ -34,6 +42,15 @@ model verification {
   code      String
   userId    Int       @unique
   user      user      @relation(fields: [userId], references: [id])
+}
+
+model category {
+  id         Int          @id @default(autoincrement())
+  createdAt  DateTime?
+  updatedAt  DateTime?
+  name       String
+  coverImg   String?
+  restaurant restaurant[]
 }
 
 enum user_role {

@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
-import { restaurantCreateInput } from "@prisma/client";
 import { PrismaService } from "src/globalLib/prisma.service";
+import { CreateRestaurantDto } from "./dtos/create-restaurant.dto";
 import { UpdateRestaurantDto } from "./dtos/update-restaurant.dto";
 import { restaurant } from "./entities/restaurant.entity";
 
@@ -9,22 +9,38 @@ export class RestaurantService {
   constructor(private prisma: PrismaService) {}
 
   async getAll(): Promise<restaurant[] | null> {
-    return this.prisma.restaurant.findMany();
+    try {
+      return this.prisma.restaurant.findMany();
+    } catch (e) {
+      console.log(e);
+    }
   }
 
-  async createRestaurant(data: restaurantCreateInput): Promise<boolean> {
-    await this.prisma.restaurant.create({
-      data,
-    });
-    return true;
+  async createRestaurant({
+    name,
+    address,
+    owner,
+    category,
+  }: CreateRestaurantDto): Promise<boolean> {
+    try {
+      await this.prisma.restaurant.create({
+        data: {
+          name,
+          address,
+          user: { connect: { id: owner } },
+          category_categoryTorestaurant: { connect: { id: category } },
+        },
+      });
+      return true;
+    } catch (e) {
+      console.log(e);
+      return false;
+    }
   }
 
-  async updateRestaurant({
-    restaurant_id,
-    data,
-  }: UpdateRestaurantDto): Promise<boolean> {
+  async updateRestaurant({ id, data }: UpdateRestaurantDto): Promise<boolean> {
     await this.prisma.restaurant.update({
-      where: { restaurant_id },
+      where: { id },
       data,
     });
     return true;

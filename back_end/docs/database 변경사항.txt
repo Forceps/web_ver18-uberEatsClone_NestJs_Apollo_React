@@ -43,3 +43,45 @@ CREATE TABLE `nuber_eats`.`verification` (
 ALTER TABLE `nuber_eats`.`verification` 
 CHANGE COLUMN `code` `code` VARCHAR(25) NOT NULL ;
 
+
+
+
+
+
+/ 2020-11-22
+ALTER TABLE `nuber_eats`.`restaurant` 
+CHANGE COLUMN `ownerName` `createdAt` DATETIME NULL AFTER `restaurant_id`,
+CHANGE COLUMN `categoryName` `updatedAt` DATETIME NULL AFTER `createdAt`,
+CHANGE COLUMN `isVegan` `coverImg` MEDIUMTEXT NULL DEFAULT NULL ;
+ALTER TABLE `nuber_eats`.`restaurant` 
+CHANGE COLUMN `restaurant_id` `restaurant_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT ;
+CREATE TABLE `nuber_eats`.`category` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `createdAt` DATETIME NULL,
+  `updatedAt` DATETIME NULL,
+  `name` VARCHAR(45) NOT NULL,
+  `coverImg` MEDIUMTEXT NULL,
+  PRIMARY KEY (`id`));
+  ALTER TABLE `nuber_eats`.`restaurant` 
+ADD COLUMN `category` INT UNSIGNED NULL AFTER `address`,
+ADD INDEX `RestaurantCategory_idx` (`category` ASC) VISIBLE;
+;
+ALTER TABLE `nuber_eats`.`restaurant` 
+ADD CONSTRAINT `RestaurantCategory`
+  FOREIGN KEY (`category`)
+  REFERENCES `nuber_eats`.`category` (`id`)
+  ON DELETE SET NULL
+  ON UPDATE CASCADE;
+ALTER TABLE `nuber_eats`.`restaurant` 
+ADD COLUMN `owner` BIGINT UNSIGNED NOT NULL AFTER `category`,
+ADD INDEX `RestaurantOwner_idx` (`owner` ASC) VISIBLE;
+;
+ALTER TABLE `nuber_eats`.`restaurant` 
+ADD CONSTRAINT `RestaurantOwner`
+  FOREIGN KEY (`owner`)
+  REFERENCES `nuber_eats`.`user` (`id`)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+ALTER TABLE `nuber_eats`.`restaurant` 
+CHANGE COLUMN `restaurant_id` `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT ;
+

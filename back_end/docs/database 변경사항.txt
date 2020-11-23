@@ -43,12 +43,6 @@ CREATE TABLE `nuber_eats`.`verification` (
 ALTER TABLE `nuber_eats`.`verification` 
 CHANGE COLUMN `code` `code` VARCHAR(25) NOT NULL ;
 
-
-
-
-
-
-/ 2020-11-22
 ALTER TABLE `nuber_eats`.`restaurant` 
 CHANGE COLUMN `ownerName` `createdAt` DATETIME NULL AFTER `restaurant_id`,
 CHANGE COLUMN `categoryName` `updatedAt` DATETIME NULL AFTER `createdAt`,
@@ -89,4 +83,7 @@ ADD COLUMN `slug` VARCHAR(45) NOT NULL AFTER `coverImg`,
 ADD UNIQUE INDEX `name_UNIQUE` (`name` ASC) VISIBLE,
 ADD UNIQUE INDEX `slug_UNIQUE` (`slug` ASC) VISIBLE;
 ;
+
+
+
 

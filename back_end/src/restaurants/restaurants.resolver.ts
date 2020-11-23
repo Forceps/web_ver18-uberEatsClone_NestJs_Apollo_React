@@ -20,7 +20,7 @@ export class RestaurantResolver {
   }
 
   @Mutation(() => CreateRestaurantOutput)
-  @Role(UserRole.owner)
+  @Role([UserRole.owner])
   createRestaurant(
     @AuthUser() authUser: user,
     @Args("input") createReataurantInput: CreateRestaurantInput

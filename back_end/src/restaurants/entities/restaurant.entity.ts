@@ -19,7 +19,7 @@ export class restaurant extends CoreEntity {
   @Length(2, 45)
   address: string;
 
-  @Field(() => Number)
+  @Field(() => Number, { nullable: true })
   @IsNumber()
   category: number;
 

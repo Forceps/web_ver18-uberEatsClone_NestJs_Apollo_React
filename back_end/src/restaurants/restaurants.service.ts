@@ -1,10 +1,16 @@
 import { Injectable } from "@nestjs/common";
+import { restaurantUpdateInput } from "@prisma/client";
 import { PrismaService } from "src/globalLib/prisma.service";
 import { user } from "src/users/entities/user.entity";
+import { AllCategoriesOutput } from "./dtos/all-categories.dto";
 import {
   CreateRestaurantInput,
   CreateRestaurantOutput,
 } from "./dtos/create-restaurant.dto";
+import {
+  DeleteRestaurantInput,
+  DeleteRestaurantOutput,
+} from "./dtos/delete-restaurant.dto";
 import {
   EditRestaurantInput,
   EditRestaurantOutput,
@@ -89,31 +95,94 @@ export class RestaurantService {
           },
         },
       });
-      console.log(restaurant);
       if (!restaurant) {
         return {
           ok: false,
           error: "Restaurant not found",
         };
-      } else if (owner.id !== restaurant.user.id) {
+      }
+      if (owner.id !== restaurant.user.id) {
         return {
           ok: false,
           error: "You can't edit a restaurant that you don't own",
         };
       }
+      let data: restaurantUpdateInput = { name, address, coverImg };
+      if (categoryName) {
+        data = {
+          ...data,
+          category_categoryTorestaurant: {
+            connect: await this.getOrCreateCategory(categoryName),
+          },
+        };
+      }
       await this.prisma.restaurant.update({
         where: { id: restaurantId },
-        data: {
-          name,
-          address,
-          coverImg,
-        },
+        data,
       });
       return {
         ok: true,
       };
     } catch (e) {
       console.log(e);
+      return {
+        ok: false,
+        error: e,
+      };
+    }
+  }
+
+  async deleteRestaurant(
+    owner: user,
+    { restaurantId }: DeleteRestaurantInput
+  ): Promise<DeleteRestaurantOutput> {
+    try {
+      const restaurant = await this.prisma.restaurant.findOne({
+        where: { id: restaurantId },
+        select: {
+          id: true,
+          user: {
+            select: {
+              id: true,
+            },
+          },
+        },
+      });
+      if (!restaurant) {
+        return {
+          ok: false,
+          error: "Restaurant not found",
+        };
+      }
+      if (owner.id !== restaurant.user.id) {
+        return {
+          ok: false,
+          error: "You can't delete a restaurant that you don't own",
+        };
+      }
+      await this.prisma.restaurant.delete({
+        where: { id: restaurantId },
+      });
+      return {
+        ok: true,
+      };
+    } catch (e) {
+      console.log(e);
+      return {
+        ok: false,
+        error: e,
+      };
+    }
+  }
+
+  async allCategories(): Promise<AllCategoriesOutput> {
+    try {
+      const categories = await this.prisma.category.findMany();
+      return {
+        ok: true,
+        categories,
+      };
+    } catch (e) {
       return {
         ok: false,
         error: e,

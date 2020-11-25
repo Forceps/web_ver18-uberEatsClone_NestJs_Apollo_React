@@ -18,6 +18,7 @@ model restaurant {
   owner                         Int
   category_categoryTorestaurant category? @relation(fields: [category], references: [id])
   user                          user      @relation(fields: [owner], references: [id])
+  dish                          dish[]
 
   @@index([category], name: "RestaurantCategory_idx")
   @@index([owner], name: "RestaurantOwner_idx")
@@ -26,7 +27,7 @@ model restaurant {
 model user {
   id           Int           @id @default(autoincrement())
   createdAt    DateTime?
-  updateAt     DateTime?
+  updatedAt    DateTime?
   email        String        @unique
   verified     Int           @default(0)
   password     String
@@ -52,6 +53,18 @@ model category {
   coverImg   String?
   slug       String       @unique
   restaurant restaurant[]
+}
+
+model dish {
+  id                          Int        @id @default(autoincrement())
+  name                        String
+  price                       Int
+  photo                       String?
+  description                 String
+  restaurant                  Int
+  restaurant_dishTorestaurant restaurant @relation(fields: [restaurant], references: [id])
+
+  @@index([restaurant], name: "menu_idx")
 }
 
 enum user_role {

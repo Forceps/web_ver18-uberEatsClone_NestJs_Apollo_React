@@ -87,3 +87,25 @@ ADD UNIQUE INDEX `slug_UNIQUE` (`slug` ASC) VISIBLE;
 
 
 
+
+
+// 2020-11-25
+
+CREATE TABLE `nuber_eats`.`dish` (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(45) NOT NULL,
+  `price` INT UNSIGNED NOT NULL,
+  `photo` MEDIUMTEXT NULL,
+  `description` VARCHAR(140) NOT NULL,
+  PRIMARY KEY (`id`));
+
+ALTER TABLE `nuber_eats`.`dish` 
+ADD COLUMN `restaurant` BIGINT UNSIGNED NOT NULL AFTER `description`,
+ADD INDEX `menu_idx` (`restaurant` ASC) VISIBLE;
+;
+ALTER TABLE `nuber_eats`.`dish` 
+ADD CONSTRAINT `menu`
+  FOREIGN KEY (`restaurant`)
+  REFERENCES `nuber_eats`.`restaurant` (`id`)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;

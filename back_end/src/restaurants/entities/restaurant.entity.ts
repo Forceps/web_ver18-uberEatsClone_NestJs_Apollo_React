@@ -12,7 +12,7 @@ export class restaurant extends CoreEntity {
 
   @Field(() => String, { nullable: true })
   @IsString()
-  coverImg: string;
+  coverImg?: string;
 
   @Field(() => String)
   @IsString()
@@ -21,7 +21,7 @@ export class restaurant extends CoreEntity {
 
   @Field(() => Number, { nullable: true })
   @IsNumber()
-  category: number;
+  category?: number;
 
   @Field(() => Number)
   @IsNumber()

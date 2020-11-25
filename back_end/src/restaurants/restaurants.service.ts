@@ -3,6 +3,7 @@ import { restaurantUpdateInput } from "@prisma/client";
 import { PrismaService } from "src/globalLib/prisma.service";
 import { user } from "src/users/entities/user.entity";
 import { AllCategoriesOutput } from "./dtos/all-categories.dto";
+import { CategoryInput, CategoryOutput } from "./dtos/category.dto";
 import {
   CreateRestaurantInput,
   CreateRestaurantOutput,
@@ -15,19 +16,17 @@ import {
   EditRestaurantInput,
   EditRestaurantOutput,
 } from "./dtos/edit-restaurant.dto";
-import { restaurant } from "./entities/restaurant.entity";
+import { RestaurantInput, RestaurantOutput } from "./dtos/restaurant.dto";
+import { RestaurantsInput, RestaurantsOutput } from "./dtos/restaurants.dto";
+import {
+  SearchRestaurantInput,
+  SearchRestaurantOutput,
+} from "./dtos/search-restaurant.dto";
+import { category } from "./entities/category.entity";
 
 @Injectable()
 export class RestaurantService {
   constructor(private prisma: PrismaService) {}
-
-  async getAll(): Promise<restaurant[] | null> {
-    try {
-      return this.prisma.restaurant.findMany();
-    } catch (e) {
-      console.log(e);
-    }
-  }
 
   async getOrCreateCategory(name: string): Promise<{ id: number }> {
     const rfCategoryName = name.trim().toLowerCase();
@@ -181,6 +180,123 @@ export class RestaurantService {
       return {
         ok: true,
         categories,
+      };
+    } catch (e) {
+      return {
+        ok: false,
+        error: e,
+      };
+    }
+  }
+
+  countRestaurant(category: category) {
+    return this.prisma.restaurant.count({
+      where: {
+        category_categoryTorestaurant: {
+          id: category.id,
+        },
+      },
+    });
+  }
+
+  async findCategoryBySlug({
+    slug,
+    page,
+  }: CategoryInput): Promise<CategoryOutput> {
+    try {
+      const category = await this.prisma.category.findOne({
+        where: { slug },
+        include: {
+          restaurant: {
+            take: 25,
+            skip: (page - 1) * 25,
+          },
+        },
+      });
+      if (!slug) {
+        return {
+          ok: false,
+          error: "Category not found",
+        };
+      }
+      const totalResults = await this.countRestaurant(category);
+      return {
+        ok: true,
+        category,
+        totalPages: Math.ceil(totalResults / 25),
+      };
+    } catch (e) {
+      return {
+        ok: false,
+        error: e,
+      };
+    }
+  }
+
+  async allRestaurants({ page }: RestaurantsInput): Promise<RestaurantsOutput> {
+    try {
+      const restaurants = await this.prisma.restaurant.findMany({
+        take: 25,
+        skip: (page - 1) * 25,
+      });
+      const allRestaurantsCount = await this.prisma.restaurant.count();
+      return {
+        ok: true,
+        results: restaurants,
+        totalPages: Math.ceil(allRestaurantsCount / 25),
+        totalResults: allRestaurantsCount,
+      };
+    } catch (e) {
+      return {
+        ok: false,
+        error: e,
+      };
+    }
+  }
+
+  async findRestaurantById({
+    restaurantId,
+  }: RestaurantInput): Promise<RestaurantOutput> {
+    try {
+      const restaurant = await this.prisma.restaurant.findOne({
+        where: { id: restaurantId },
+      });
+      if (!restaurant) {
+        return {
+          ok: false,
+          error: "Restaurant not found",
+        };
+      }
+      return {
+        ok: true,
+        results: restaurant,
+      };
+    } catch (e) {
+      return {
+        ok: false,
+        error: e,
+      };
+    }
+  }
+
+  async searchRestaurantByName({
+    query,
+    page,
+  }: SearchRestaurantInput): Promise<SearchRestaurantOutput> {
+    try {
+      const restaurants = await this.prisma.restaurant.findMany({
+        where: {
+          name: { contains: query },
+        },
+        take: 25,
+        skip: (page - 1) * 25,
+      });
+      const totalResults = restaurants.length;
+      return {
+        ok: true,
+        restaurants,
+        totalResults,
+        totalPages: Math.ceil(totalResults / 25),
       };
     } catch (e) {
       return {

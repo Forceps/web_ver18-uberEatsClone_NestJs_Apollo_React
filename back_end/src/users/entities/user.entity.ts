@@ -6,6 +6,9 @@ import {
 } from "@nestjs/graphql";
 import { IsBoolean, IsEmail, IsEnum, IsString, Length } from "class-validator";
 import { CoreEntity } from "src/globalLib/common/entities/core.entity";
+import { order } from "src/orders/entities/order.entity";
+import { restaurant } from "src/restaurants/entities/restaurant.entity";
+import { verification } from "./verification.entity";
 
 export enum UserRole {
   client = "client",
@@ -35,4 +38,16 @@ export class user extends CoreEntity {
   @Field(() => UserRole)
   @IsEnum(UserRole)
   role: UserRole;
+
+  @Field(() => [order], { nullable: true })
+  order_order_customerTouser?: order[];
+
+  @Field(() => [order], { nullable: true })
+  order_order_driverTouser?: order[];
+
+  @Field(() => [restaurant], { nullable: true })
+  restaurant?: restaurant[];
+
+  @Field(() => [verification], { nullable: true })
+  verification?: verification[];
 }

@@ -19,21 +19,24 @@ model restaurant {
   category_categoryTorestaurant category? @relation(fields: [category], references: [id])
   user                          user      @relation(fields: [owner], references: [id])
   dish                          dish[]
+  order                         order[]
 
   @@index([category], name: "RestaurantCategory_idx")
   @@index([owner], name: "RestaurantOwner_idx")
 }
 
 model user {
-  id           Int           @id @default(autoincrement())
-  createdAt    DateTime?
-  updateAt     DateTime?
-  email        String        @unique
-  verified     Int           @default(0)
-  password     String
-  role         user_role     @default(client)
-  restaurant   restaurant[]
-  verification verification?
+  id                         Int           @id @default(autoincrement())
+  createdAt                  DateTime?
+  updatedAt                  DateTime?
+  email                      String        @unique
+  verified                   Int           @default(0)
+  password                   String
+  role                       user_role     @default(client)
+  order_order_customerTouser order[]       @relation("order_customerTouser")
+  order_order_driverTouser   order[]       @relation("order_driverTouser")
+  restaurant                 restaurant[]
+  verification               verification?
 }
 
 model verification {
@@ -56,7 +59,7 @@ model category {
 }
 
 model dish {
-  id                          Int        @id @default(autoincrement())
+  id                          Int              @id @default(autoincrement())
   createdAt                   DateTime?
   updatedAt                   DateTime?
   name                        String
@@ -65,13 +68,51 @@ model dish {
   description                 String
   restaurant                  Int
   options                     Json?
-  restaurant_dishTorestaurant restaurant @relation(fields: [restaurant], references: [id])
+  restaurant_dishTorestaurant restaurant       @relation(fields: [restaurant], references: [id])
+  m2m_dish_order              m2m_dish_order[]
 
   @@index([restaurant], name: "menu_idx")
+}
+
+model m2m_dish_order {
+  id                          Int   @id @default(autoincrement())
+  dish                        Int?
+  order                       Int
+  dish_dishTom2m_dish_order   dish? @relation(fields: [dish], references: [id])
+  order_m2m_dish_orderToorder order @relation(fields: [order], references: [id])
+
+  @@index([order], name: "M2M_order_idx")
+  @@index([dish], name: "m2m_dish_idx")
+}
+
+model order {
+  id                           Int              @id @default(autoincrement())
+  createdAt                    DateTime?
+  updatedAt                    DateTime?
+  customer                     Int?
+  driver                       Int?
+  restaurant                   Int?
+  total                        Float
+  role                         order_role
+  user_order_customerTouser    user?            @relation("order_customerTouser", fields: [customer], references: [id])
+  user_order_driverTouser      user?            @relation("order_driverTouser", fields: [driver], references: [id])
+  restaurant_orderTorestaurant restaurant?      @relation(fields: [restaurant], references: [id])
+  m2m_dish_order               m2m_dish_order[]
+
+  @@index([customer], name: "customer_idx")
+  @@index([driver], name: "driver_idx")
+  @@index([restaurant], name: "targetRestaurant_idx")
 }
 
 enum user_role {
   client
   owner
   delivery
+}
+
+enum order_role {
+  pending
+  cooking
+  pickedUp
+  delivered
 }

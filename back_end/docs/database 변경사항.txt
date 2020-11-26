@@ -103,18 +103,81 @@ ADD CONSTRAINT `menu`
   ON DELETE CASCADE
   ON UPDATE CASCADE;
 
-
-
-
-
-
-
-
-
-  // 2020 - 11 - 26
   ALTER TABLE `nuber_eats`.`dish` 
 ADD COLUMN `options` JSON NULL AFTER `restaurant`;
 ALTER TABLE `nuber_eats`.`dish` 
 ADD COLUMN `createdAt` DATETIME NULL AFTER `id`,
 ADD COLUMN `updatedAt` DATETIME NULL AFTER `createdAt`;
 
+
+
+
+
+
+
+
+// 2020 - 11 - 26
+
+CREATE TABLE `nuber_eats`.`order` (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `createdAt` DATETIME NULL,
+  `updatedAt` DATETIME NULL,
+  `customer` BIGINT UNSIGNED NULL,
+  `driver` BIGINT UNSIGNED NULL,
+  `restaurant` BIGINT UNSIGNED NULL,
+  `total` FLOAT UNSIGNED NOT NULL,
+  `role` ENUM("pending", "cooking", "pickedUp", "delivered") NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `customer_idx` (`customer` ASC) VISIBLE,
+  INDEX `driver_idx` (`driver` ASC) VISIBLE,
+  INDEX `targetRestaurant_idx` (`restaurant` ASC) VISIBLE,
+  CONSTRAINT `customer`
+    FOREIGN KEY (`customer`)
+    REFERENCES `nuber_eats`.`user` (`id`)
+    ON DELETE SET NULL
+    ON UPDATE CASCADE,
+  CONSTRAINT `driver`
+    FOREIGN KEY (`driver`)
+    REFERENCES `nuber_eats`.`user` (`id`)
+    ON DELETE SET NULL
+    ON UPDATE CASCADE,
+  CONSTRAINT `targetRestaurant`
+    FOREIGN KEY (`restaurant`)
+    REFERENCES `nuber_eats`.`restaurant` (`id`)
+    ON DELETE SET NULL
+    ON UPDATE CASCADE);
+CREATE TABLE `nuber_eats`.`m2m_dish_order` (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `dish` BIGINT UNSIGNED NULL,
+  `order` BIGINT UNSIGNED NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `M2M_order_idx` (`order` ASC) VISIBLE,
+  CONSTRAINT `m2m_order`
+    FOREIGN KEY (`order`)
+    REFERENCES `nuber_eats`.`order` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+ALTER TABLE `nuber_eats`.`m2m_dish_order` 
+ADD INDEX `m2m_dish_idx` (`dish` ASC) VISIBLE;
+;
+ALTER TABLE `nuber_eats`.`m2m_dish_order` 
+ADD CONSTRAINT `m2m_dish`
+  FOREIGN KEY (`dish`)
+  REFERENCES `nuber_eats`.`dish` (`id`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
+  ALTER TABLE `nuber_eats`.`m2m_dish_order` 
+DROP FOREIGN KEY `m2m_dish`,
+DROP FOREIGN KEY `m2m_order`;
+ALTER TABLE `nuber_eats`.`m2m_dish_order` 
+ADD CONSTRAINT `m2m_dish`
+  FOREIGN KEY (`dish`)
+  REFERENCES `nuber_eats`.`dish` (`id`)
+  ON DELETE SET NULL
+  ON UPDATE CASCADE,
+ADD CONSTRAINT `m2m_order`
+  FOREIGN KEY (`order`)
+  REFERENCES `nuber_eats`.`order` (`id`)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+  

@@ -13,6 +13,7 @@ import { JwtModule } from "./jwt/jwt.module";
 import { JwtMiddleware } from "./jwt/jwt.middleware";
 import { PrismaService } from "./globalLib/prisma.service";
 import { AuthModule } from "./auth/auth.module";
+import { OrdersModule } from './orders/orders.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { AuthModule } from "./auth/auth.module";
     RestaurantsModule,
     UsersModule,
     AuthModule,
+    OrdersModule,
   ],
   controllers: [],
   providers: [PrismaService],

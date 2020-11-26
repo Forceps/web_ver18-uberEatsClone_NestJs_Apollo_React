@@ -1,16 +1,20 @@
-import { Field, InputType, ObjectType } from "@nestjs/graphql";
+import { Field, InputType, Int, ObjectType } from "@nestjs/graphql";
 import { IsNumber, IsString, Length } from "class-validator";
 import { CoreEntity } from "src/globalLib/common/entities/core.entity";
+import { user } from "./user.entity";
 
 @InputType({ isAbstract: true })
 @ObjectType()
-export class Verification extends CoreEntity {
+export class verification extends CoreEntity {
   @Field(() => String)
   @IsString()
   @Length(2, 25)
   code: string;
 
-  @Field(() => Number)
+  @Field(() => Int)
   @IsNumber()
   userId: number;
+
+  @Field(() => user, { nullable: true })
+  user?: user;
 }

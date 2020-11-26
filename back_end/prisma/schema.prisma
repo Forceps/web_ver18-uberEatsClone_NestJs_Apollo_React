@@ -27,7 +27,7 @@ model restaurant {
 model user {
   id           Int           @id @default(autoincrement())
   createdAt    DateTime?
-  updatedAt    DateTime?
+  updateAt     DateTime?
   email        String        @unique
   verified     Int           @default(0)
   password     String
@@ -57,11 +57,14 @@ model category {
 
 model dish {
   id                          Int        @id @default(autoincrement())
+  createdAt                   DateTime?
+  updatedAt                   DateTime?
   name                        String
   price                       Int
   photo                       String?
   description                 String
   restaurant                  Int
+  options                     Json?
   restaurant_dishTorestaurant restaurant @relation(fields: [restaurant], references: [id])
 
   @@index([restaurant], name: "menu_idx")

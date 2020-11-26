@@ -84,13 +84,6 @@ ADD UNIQUE INDEX `name_UNIQUE` (`name` ASC) VISIBLE,
 ADD UNIQUE INDEX `slug_UNIQUE` (`slug` ASC) VISIBLE;
 ;
 
-
-
-
-
-
-// 2020-11-25
-
 CREATE TABLE `nuber_eats`.`dish` (
   `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
@@ -109,3 +102,19 @@ ADD CONSTRAINT `menu`
   REFERENCES `nuber_eats`.`restaurant` (`id`)
   ON DELETE CASCADE
   ON UPDATE CASCADE;
+
+
+
+
+
+
+
+
+
+  // 2020 - 11 - 26
+  ALTER TABLE `nuber_eats`.`dish` 
+ADD COLUMN `options` JSON NULL AFTER `restaurant`;
+ALTER TABLE `nuber_eats`.`dish` 
+ADD COLUMN `createdAt` DATETIME NULL AFTER `id`,
+ADD COLUMN `updatedAt` DATETIME NULL AFTER `createdAt`;
+

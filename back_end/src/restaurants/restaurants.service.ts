@@ -1,17 +1,20 @@
 import { Injectable } from "@nestjs/common";
-import { restaurantUpdateInput } from "@prisma/client";
+import { dishUpdateInput, restaurantUpdateInput } from "@prisma/client";
 import { PrismaService } from "src/globalLib/prisma.service";
 import { user } from "src/users/entities/user.entity";
 import { AllCategoriesOutput } from "./dtos/all-categories.dto";
 import { CategoryInput, CategoryOutput } from "./dtos/category.dto";
+import { CreateDishInput, CreateDishOutput } from "./dtos/create-dish.dto";
 import {
   CreateRestaurantInput,
   CreateRestaurantOutput,
 } from "./dtos/create-restaurant.dto";
+import { DeleteDishInput, DeleteDishOutput } from "./dtos/delete-dish.dto";
 import {
   DeleteRestaurantInput,
   DeleteRestaurantOutput,
 } from "./dtos/delete-restaurant.dto";
+import { EditDishInput, EditDishOutput } from "./dtos/edit-dish.dto";
 import {
   EditRestaurantInput,
   EditRestaurantOutput,
@@ -260,6 +263,9 @@ export class RestaurantService {
     try {
       const restaurant = await this.prisma.restaurant.findOne({
         where: { id: restaurantId },
+        include: {
+          dish: true,
+        },
       });
       if (!restaurant) {
         return {
@@ -269,7 +275,7 @@ export class RestaurantService {
       }
       return {
         ok: true,
-        results: restaurant,
+        restaurant,
       };
     } catch (e) {
       return {
@@ -297,6 +303,129 @@ export class RestaurantService {
         restaurants,
         totalResults,
         totalPages: Math.ceil(totalResults / 25),
+      };
+    } catch (e) {
+      return {
+        ok: false,
+        error: e,
+      };
+    }
+  }
+
+  async createDish(
+    owner: user,
+    { name, price, description, options, restaurantId }: CreateDishInput
+  ): Promise<CreateDishOutput> {
+    try {
+      const restaurant = await this.prisma.restaurant.findOne({
+        where: { id: restaurantId },
+        select: { owner: true },
+      });
+      if (!restaurant) {
+        return {
+          ok: false,
+          error: "Restaurant not found",
+        };
+      }
+      if (owner.id !== restaurant.owner) {
+        return {
+          ok: false,
+          error: "You are not owner",
+        };
+      }
+      await this.prisma.dish.create({
+        data: {
+          name,
+          price,
+          description,
+          options,
+          restaurant_dishTorestaurant: {
+            connect: { id: restaurantId },
+          },
+        },
+      });
+      return {
+        ok: true,
+      };
+    } catch (e) {
+      return {
+        ok: false,
+        error: e,
+      };
+    }
+  }
+
+  async editDish(
+    owner: user,
+    { name, options, price, description, dishId }: EditDishInput
+  ): Promise<EditDishOutput> {
+    try {
+      const dish = await this.prisma.dish.findOne({
+        where: { id: dishId },
+        select: {
+          restaurant_dishTorestaurant: {
+            select: { owner: true },
+          },
+        },
+      });
+      if (!dish) {
+        return {
+          ok: false,
+          error: "Dish not found",
+        };
+      }
+      if (dish.restaurant_dishTorestaurant.owner !== owner.id) {
+        return {
+          ok: false,
+          error: "You are not restaurant owner",
+        };
+      }
+      let data: dishUpdateInput = { name, options, price, description };
+      await this.prisma.dish.update({
+        where: { id: dishId },
+        data,
+      });
+      return {
+        ok: true,
+      };
+    } catch (e) {
+      return {
+        ok: false,
+        error: e,
+      };
+    }
+  }
+
+  async deleteDish(
+    owner: user,
+    { dishId }: DeleteDishInput
+  ): Promise<DeleteDishOutput> {
+    try {
+      const dish = await this.prisma.dish.findOne({
+        where: { id: dishId },
+        select: {
+          restaurant_dishTorestaurant: {
+            select: { owner: true },
+          },
+        },
+      });
+      if (!dish) {
+        return {
+          ok: false,
+          error: "Dish not found",
+        };
+      }
+      if (dish.restaurant_dishTorestaurant.owner !== owner.id) {
+        return {
+          ok: false,
+          error: "You are not restaurant owner",
+        };
+      }
+      await this.prisma.dish.delete({
+        where: { id: dishId },
+      });
+      return {
+        ok: true,
       };
     } catch (e) {
       return {

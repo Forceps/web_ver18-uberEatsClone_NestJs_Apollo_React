@@ -11,5 +11,5 @@ export class RestaurantInput {
 @ObjectType()
 export class RestaurantOutput extends CoreOutput {
   @Field(() => restaurant, { nullable: true })
-  results?: restaurant;
+  restaurant?: restaurant;
 }

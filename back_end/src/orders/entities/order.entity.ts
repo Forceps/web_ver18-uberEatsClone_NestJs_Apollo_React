@@ -10,7 +10,7 @@ import { IsEnum, IsNumber } from "class-validator";
 import { CoreEntity } from "src/globalLib/common/entities/core.entity";
 import { restaurant } from "src/restaurants/entities/restaurant.entity";
 import { user } from "src/users/entities/user.entity";
-import { m2m_dish_order } from "./m2m_dish_order.entity";
+import { m2m_order_item_order } from "./m2m_order_item_order.entity";
 
 export enum OrderStatus {
   pending = "pending",
@@ -53,6 +53,6 @@ export class order extends CoreEntity {
   @Field(() => restaurant, { nullable: true })
   restaurant_orderTorestaurant?: restaurant;
 
-  @Field(() => [m2m_dish_order])
-  m2m_dish_order: m2m_dish_order[];
+  @Field(() => [m2m_order_item_order])
+  m2m_order_item_order: m2m_order_item_order[];
 }

@@ -109,15 +109,6 @@ ALTER TABLE `nuber_eats`.`dish`
 ADD COLUMN `createdAt` DATETIME NULL AFTER `id`,
 ADD COLUMN `updatedAt` DATETIME NULL AFTER `createdAt`;
 
-
-
-
-
-
-
-
-// 2020 - 11 - 26
-
 CREATE TABLE `nuber_eats`.`order` (
   `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
   `createdAt` DATETIME NULL,
@@ -180,4 +171,38 @@ ADD CONSTRAINT `m2m_order`
   REFERENCES `nuber_eats`.`order` (`id`)
   ON DELETE CASCADE
   ON UPDATE CASCADE;
+
+
+
+// 2020 - 11 - 27
+
+CREATE TABLE `nuber_eats`.`order-item` (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `dish` BIGINT UNSIGNED NULL,
+  `options` JSON NULL,
+  PRIMARY KEY (`id`),
+  INDEX `dishKinds_idx` (`dish` ASC) VISIBLE,
+  CONSTRAINT `dishKinds`
+    FOREIGN KEY (`dish`)
+    REFERENCES `nuber_eats`.`dish` (`id`)
+    ON DELETE SET NULL
+    ON UPDATE CASCADE);
+
+    ALTER TABLE `nuber_eats`.`m2m_dish_order` 
+RENAME TO  `nuber_eats`.`m2m_order-item_order` ;
+ALTER TABLE `nuber_eats`.`m2m_order-item_order` 
+ADD CONSTRAINT `m2m_order-item`
+  FOREIGN KEY (`order-item`)
+  REFERENCES `nuber_eats`.`order-item` (`id`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
+  ALTER TABLE `nuber_eats`.`m2m_order-item_order` 
+DROP FOREIGN KEY `m2m_order-item`;
+ALTER TABLE `nuber_eats`.`m2m_order-item_order` 
+ADD CONSTRAINT `m2m_order-item`
+  FOREIGN KEY (`order-item`)
+  REFERENCES `nuber_eats`.`order-item` (`id`)
+  ON DELETE SET NULL
+  ON UPDATE CASCADE;
+
   

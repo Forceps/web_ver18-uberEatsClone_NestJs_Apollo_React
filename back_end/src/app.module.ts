@@ -13,7 +13,7 @@ import { JwtModule } from "./jwt/jwt.module";
 import { JwtMiddleware } from "./jwt/jwt.middleware";
 import { PrismaService } from "./globalLib/prisma.service";
 import { AuthModule } from "./auth/auth.module";
-import { OrdersModule } from './orders/orders.module';
+import { OrdersModule } from "./orders/order.module";
 
 @Module({
   imports: [

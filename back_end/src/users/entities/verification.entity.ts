@@ -3,7 +3,7 @@ import { IsNumber, IsString, Length } from "class-validator";
 import { CoreEntity } from "src/globalLib/common/entities/core.entity";
 import { user } from "./user.entity";
 
-@InputType({ isAbstract: true })
+@InputType("VerificationInputType", { isAbstract: true })
 @ObjectType()
 export class verification extends CoreEntity {
   @Field(() => String)

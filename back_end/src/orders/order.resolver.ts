@@ -16,15 +16,6 @@ export class OrderResolver {
     @AuthUser() authUser: user,
     @Args("input") createOrderInput: CreateOrderInput
   ): Promise<CreateOrderOutput> {
-    return this.orderService.(CreateOrderInput);
-  }
-
-  @Mutation(() => EditProfileOutput)
-  @Role(["any"])
-  editProfile(
-    @AuthUser() authUser: user,
-    @Args("input") editProfileInput: EditProfileInput
-  ): Promise<EditProfileOutput> {
-    return this.usersService.editProfile(authUser.id, editProfileInput);
+    return this.orderService.createOrder(authUser, createOrderInput);
   }
 }

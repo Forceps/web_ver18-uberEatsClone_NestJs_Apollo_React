@@ -204,5 +204,13 @@ ADD CONSTRAINT `m2m_order-item`
   REFERENCES `nuber_eats`.`order-item` (`id`)
   ON DELETE SET NULL
   ON UPDATE CASCADE;
+ALTER TABLE `nuber_eats`.`order` 
+CHANGE COLUMN `role` `status` ENUM('pending', 'cooking', 'pickedUp', 'delivered') NOT NULL ;
+ALTER TABLE `nuber_eats`.`order` 
+CHANGE COLUMN `status` `status` ENUM('pending', 'cooking', 'pickedUp', 'delivered') NOT NULL DEFAULT 'pending' ;
+ALTER TABLE `nuber_eats`.`order` 
+CHANGE COLUMN `total` `total` FLOAT UNSIGNED NOT NULL DEFAULT 0 ;
+ALTER TABLE `nuber_eats`.`dish` 
+CHANGE COLUMN `price` `price` INT UNSIGNED NOT NULL DEFAULT 0 ;
 
   

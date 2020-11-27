@@ -42,7 +42,7 @@ export class order extends CoreEntity {
 
   @Field(() => OrderStatus)
   @IsEnum(OrderStatus)
-  role: OrderStatus;
+  status: OrderStatus;
 
   @Field(() => user, { nullable: true })
   user_order_customerTouser?: user;

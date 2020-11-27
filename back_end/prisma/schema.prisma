@@ -63,7 +63,7 @@ model dish {
   createdAt                   DateTime?
   updatedAt                   DateTime?
   name                        String
-  price                       Int
+  price                       Int          @default(0)
   photo                       String?
   description                 String
   restaurant                  Int
@@ -81,8 +81,8 @@ model order {
   customer                     Int?
   driver                       Int?
   restaurant                   Int?
-  total                        Float
-  role                         order_role
+  total                        Float                  @default(0)
+  status                       order_status           @default(pending)
   user_order_customerTouser    user?                  @relation("order_customerTouser", fields: [customer], references: [id])
   user_order_driverTouser      user?                  @relation("order_driverTouser", fields: [driver], references: [id])
   restaurant_orderTorestaurant restaurant?            @relation(fields: [restaurant], references: [id])
@@ -122,7 +122,7 @@ enum user_role {
   delivery
 }
 
-enum order_role {
+enum order_status {
   pending
   cooking
   pickedUp

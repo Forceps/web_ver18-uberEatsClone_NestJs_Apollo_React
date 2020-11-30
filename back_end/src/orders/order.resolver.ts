@@ -3,6 +3,7 @@ import { AuthUser } from "src/auth/auth-user.decorator";
 import { Role } from "src/auth/role.decorator";
 import { user } from "src/users/entities/user.entity";
 import { CreateOrderInput, CreateOrderOutput } from "./dtos/create-order.dto";
+import { GetOrdersInput, GetOrdersOutput } from "./dtos/get-orders.dto";
 import { order } from "./entities/order.entity";
 import { OrderService } from "./order.service";
 
@@ -17,5 +18,14 @@ export class OrderResolver {
     @Args("input") createOrderInput: CreateOrderInput
   ): Promise<CreateOrderOutput> {
     return this.orderService.createOrder(authUser, createOrderInput);
+  }
+
+  @Query(() => GetOrdersOutput)
+  @Role(["any"])
+  getOrders(
+    @AuthUser() authUser: user,
+    @Args("input") getOrdersInput: GetOrdersInput
+  ): Promise<GetOrdersOutput> {
+    return this.orderService.getOrders(authUser, getOrdersInput);
   }
 }

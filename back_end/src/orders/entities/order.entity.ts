@@ -54,5 +54,5 @@ export class order extends CoreEntity {
   restaurant_orderTorestaurant?: restaurant;
 
   @Field(() => [m2m_order_item_order])
-  m2m_order_item_order: m2m_order_item_order[];
+  m2m_order_item_order?: m2m_order_item_order[];
 }

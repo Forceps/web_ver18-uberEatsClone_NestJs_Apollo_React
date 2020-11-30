@@ -1,7 +1,6 @@
 import { Field, InputType, Int, ObjectType } from "@nestjs/graphql";
 import { JsonValue } from "@prisma/client";
 import { IsNumber, IsString } from "class-validator";
-import { CoreEntity } from "src/globalLib/common/entities/core.entity";
 import { dish } from "src/restaurants/entities/dish.entity";
 import { m2m_order_item_order } from "./m2m_order_item_order.entity";
 
@@ -14,9 +13,6 @@ export class OrderItemOption {
   @Field(() => String, { nullable: true })
   @IsString()
   choice?: string;
-  @Field(() => Int, { nullable: true })
-  @IsNumber()
-  extra?: number;
 }
 
 @InputType("OrderItemInputType", { isAbstract: true })

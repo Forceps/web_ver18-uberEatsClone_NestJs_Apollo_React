@@ -172,10 +172,6 @@ ADD CONSTRAINT `m2m_order`
   ON DELETE CASCADE
   ON UPDATE CASCADE;
 
-
-
-// 2020 - 11 - 27
-
 CREATE TABLE `nuber_eats`.`order-item` (
   `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
   `dish` BIGINT UNSIGNED NULL,
@@ -188,8 +184,18 @@ CREATE TABLE `nuber_eats`.`order-item` (
     ON DELETE SET NULL
     ON UPDATE CASCADE);
 
-    ALTER TABLE `nuber_eats`.`m2m_dish_order` 
+ALTER TABLE `nuber_eats`.`m2m_dish_order` 
 RENAME TO  `nuber_eats`.`m2m_order-item_order` ;
+ALTER TABLE `nuber_eats`.`m2m_order-item_order` 
+DROP FOREIGN KEY `m2m_dish`;
+ALTER TABLE `nuber_eats`.`m2m_order-item_order` 
+CHANGE COLUMN `dish` `order-item` BIGINT UNSIGNED NULL DEFAULT NULL ;
+ALTER TABLE `nuber_eats`.`m2m_order-item_order` 
+ADD CONSTRAINT `m2m_dish`
+  FOREIGN KEY (`order-item`)
+  REFERENCES `nuber_eats`.`dish` (`id`)
+  ON DELETE SET NULL
+  ON UPDATE CASCADE;
 ALTER TABLE `nuber_eats`.`m2m_order-item_order` 
 ADD CONSTRAINT `m2m_order-item`
   FOREIGN KEY (`order-item`)

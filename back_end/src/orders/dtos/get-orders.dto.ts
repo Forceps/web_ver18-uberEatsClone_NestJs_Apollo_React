@@ -1,7 +1,8 @@
-import { Field, InputType, Int, ObjectType, PickType } from "@nestjs/graphql";
+import { Field, InputType, ObjectType } from "@nestjs/graphql";
+import { order } from "@prisma/client";
 import { IsEnum } from "class-validator";
 import { CoreOutput } from "src/globalLib/common/dtos/output.dto";
-import { order, OrderStatus } from "../entities/order.entity";
+import { order as orderE, OrderStatus } from "../entities/order.entity";
 
 @InputType()
 export class GetOrdersInput {
@@ -12,6 +13,6 @@ export class GetOrdersInput {
 
 @ObjectType()
 export class GetOrdersOutput extends CoreOutput {
-  @Field(() => [order], { nullable: true })
+  @Field(() => [orderE], { nullable: true })
   orders?: order[];
 }

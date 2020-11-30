@@ -5,7 +5,6 @@ import { CreateOrderInput, CreateOrderOutput } from "./dtos/create-order.dto";
 import { order_item } from "src/orders/entities/order-item.entity";
 import { GetOrdersInput, GetOrdersOutput } from "./dtos/get-orders.dto";
 import { order } from "@prisma/client";
-// import { order } from "./entities/order.entity";
 
 @Injectable()
 export class OrderService {

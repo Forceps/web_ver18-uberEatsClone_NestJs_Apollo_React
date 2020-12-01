@@ -15,6 +15,7 @@ import { m2m_order_item_order } from "./m2m_order_item_order.entity";
 export enum OrderStatus {
   pending = "pending",
   cooking = "cooking",
+  cooked = "cooked",
   pickedUp = "pickedUp",
   delivered = "delivered",
 }

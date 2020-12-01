@@ -28,7 +28,12 @@ import { OrdersModule } from "./orders/order.module";
     }),
     GraphQLModule.forRoot({
       autoSchemaFile: true,
-      context: ({ req }) => ({ user: req["user"] }),
+      context: ({ req, connection }) => {
+        if (req) {
+          return { user: req["user"] };
+        }
+      },
+      installSubscriptionHandlers: true,
     }),
     JwtModule.forRoot({
       privateKey: process.env.PRIVATE_KEY,

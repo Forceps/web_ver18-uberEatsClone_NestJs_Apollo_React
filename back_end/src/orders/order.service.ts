@@ -4,7 +4,9 @@ import { user, UserRole } from "src/users/entities/user.entity";
 import { CreateOrderInput, CreateOrderOutput } from "./dtos/create-order.dto";
 import { order_item } from "src/orders/entities/order-item.entity";
 import { GetOrdersInput, GetOrdersOutput } from "./dtos/get-orders.dto";
-import { order } from "@prisma/client";
+import { order, orderWhereInput } from "@prisma/client";
+import { GetOrderInput, GetOrderOutput } from "./dtos/get-order.dto";
+import { EditOrderInput, EditOrderOutput } from "./dtos/edit-order.dto";
 
 @Injectable()
 export class OrderService {
@@ -106,32 +108,93 @@ export class OrderService {
     }
   }
 
+  async editOrder(
+    customer: user,
+    { restaurantId, items }: EditOrderInput
+  ): Promise<EditOrderOutput> {
+    try {
+      return {
+        ok: true,
+      };
+    } catch (e) {
+      return {
+        ok: false,
+        error: e,
+      };
+    }
+  }
+
   async getOrders(
     user: user,
     { status }: GetOrdersInput
   ): Promise<GetOrdersOutput> {
     try {
-      let orders: order[] = [];
+      let orderWhereInput: orderWhereInput = {};
       if (user.role === UserRole.client) {
-        orders = await this.prisma.order.findMany({
-          where: { customer: user.id },
-        });
+        orderWhereInput = { customer: user.id };
       } else if (user.role === UserRole.delivery) {
-        orders = await this.prisma.order.findMany({
-          where: { driver: user.id },
-        });
+        orderWhereInput = { driver: user.id };
       } else if (user.role === UserRole.owner) {
-        orders = await this.prisma.order.findMany({
-          where: {
-            restaurant_orderTorestaurant: {
-              owner: user.id,
-            },
+        orderWhereInput = {
+          restaurant_orderTorestaurant: {
+            owner: user.id,
           },
-        });
+        };
+      } else {
+        return {
+          ok: false,
+          error: "No role assigned",
+        };
       }
+      if (status) {
+        orderWhereInput = { ...orderWhereInput, status };
+      }
+      const orders = await this.prisma.order.findMany({
+        where: orderWhereInput,
+      });
       return {
         ok: true,
         orders,
+      };
+    } catch (e) {
+      return {
+        ok: false,
+        error: e,
+      };
+    }
+  }
+
+  async getOrder(
+    user: user,
+    { id: orderId }: GetOrderInput
+  ): Promise<GetOrderOutput> {
+    try {
+      const order = await this.prisma.order.findOne({
+        where: { id: orderId },
+        include: {
+          restaurant_orderTorestaurant: { select: { owner: true } },
+        },
+      });
+      if (!order) {
+        return {
+          ok: false,
+          error: "Order not found",
+        };
+      }
+      if (
+        (user.role === UserRole.client && order.customer !== user.id) ||
+        (user.role === UserRole.delivery && order.driver !== user.id) ||
+        (user.role === UserRole.owner &&
+          order.restaurant_orderTorestaurant.owner !== user.id)
+      ) {
+        return {
+          ok: false,
+          error: "You can't see that",
+        };
+      }
+      return {
+        ok: true,
+        order,
       };
     } catch (e) {
       return {

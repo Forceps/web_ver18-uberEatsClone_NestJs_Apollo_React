@@ -1,19 +1,14 @@
-import {
-  MiddlewareConsumer,
-  Module,
-  NestModule,
-  RequestMethod,
-} from "@nestjs/common";
+import { Module } from "@nestjs/common";
 import * as Joi from "joi";
 import { ConfigModule } from "@nestjs/config";
 import { GraphQLModule } from "@nestjs/graphql";
 import { RestaurantsModule } from "./restaurants/restaurants.module";
 import { UsersModule } from "./users/users.module";
 import { JwtModule } from "./jwt/jwt.module";
-import { JwtMiddleware } from "./jwt/jwt.middleware";
 import { PrismaService } from "./globalLib/prisma.service";
 import { AuthModule } from "./auth/auth.module";
 import { OrdersModule } from "./orders/order.module";
+import { CommonModule } from "./globalLib/common/common.module";
 
 @Module({
   imports: [
@@ -29,9 +24,9 @@ import { OrdersModule } from "./orders/order.module";
     GraphQLModule.forRoot({
       autoSchemaFile: true,
       context: ({ req, connection }) => {
-        if (req) {
-          return { user: req["user"] };
-        }
+        return {
+          token: req ? req.headers["x-jwt"] : connection.context["x-jwt"],
+        };
       },
       installSubscriptionHandlers: true,
     }),
@@ -42,14 +37,9 @@ import { OrdersModule } from "./orders/order.module";
     UsersModule,
     AuthModule,
     OrdersModule,
+    CommonModule,
   ],
   controllers: [],
   providers: [PrismaService],
 })
-export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(JwtMiddleware)
-      .forRoutes({ path: "*", method: RequestMethod.POST });
-  }
-}
+export class AppModule {}

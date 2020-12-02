@@ -28,7 +28,7 @@ model restaurant {
 model user {
   id                         Int           @id @default(autoincrement())
   createdAt                  DateTime?
-  updatedAt                  DateTime?
+  updateAt                   DateTime?
   email                      String        @unique
   verified                   Int           @default(0)
   password                   String
@@ -59,17 +59,16 @@ model category {
 }
 
 model dish {
-  id                          Int                    @id @default(autoincrement())
+  id                          Int          @id @default(autoincrement())
   createdAt                   DateTime?
   updatedAt                   DateTime?
   name                        String
-  price                       Int                    @default(0)
+  price                       Int          @default(0)
   photo                       String?
   description                 String
   restaurant                  Int
   options                     Json?
-  restaurant_dishTorestaurant restaurant             @relation(fields: [restaurant], references: [id])
-  m2m_order_item_order        m2m_order_item_order[]
+  restaurant_dishTorestaurant restaurant   @relation(fields: [restaurant], references: [id])
   order_item                  order_item[]
 
   @@index([restaurant], name: "menu_idx")
@@ -100,10 +99,9 @@ model m2m_order_item_order {
   order                                       Int
   order_m2m_order_item_orderToorder           order       @relation(fields: [order], references: [id])
   order_item_m2m_order_item_orderToorder_item order_item? @relation(fields: [order_item], references: [id])
-  dish                                        dish?       @relation(fields: [order_item], references: [id])
 
   @@index([order], name: "M2M_order_idx")
-  @@index([order_item], name: "m2m_dish_idx")
+  @@index([order_item], name: "m2m_order-item_idx")
   @@map("m2m_order-item_order")
 }
 
@@ -127,6 +125,7 @@ enum user_role {
 enum order_status {
   pending
   cooking
+  cooked
   pickedUp
   delivered
 }

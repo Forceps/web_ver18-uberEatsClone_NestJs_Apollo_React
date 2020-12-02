@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import { PrismaService } from "src/globalLib/prisma.service";
 import { user, UserRole } from "src/users/entities/user.entity";
 import { CreateOrderInput, CreateOrderOutput } from "./dtos/create-order.dto";
@@ -8,10 +8,18 @@ import { order, orderWhereInput } from "@prisma/client";
 import { GetOrderInput, GetOrderOutput } from "./dtos/get-order.dto";
 import { EditOrderInput, EditOrderOutput } from "./dtos/edit-order.dto";
 import { OrderStatus } from "./entities/order.entity";
+import {
+  NEW_PENDING_ORDER,
+  PUB_SUB,
+} from "src/globalLib/common/common.constants";
+import { PubSub } from "graphql-subscriptions";
 
 @Injectable()
 export class OrderService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    @Inject(PUB_SUB) private readonly pubSub: PubSub
+  ) {}
 
   async createOrder(
     customer: user,
@@ -20,6 +28,7 @@ export class OrderService {
     try {
       const restaurant = await this.prisma.restaurant.findOne({
         where: { id: restaurantId },
+        select: { owner: true },
       });
       if (!restaurant) {
         return {
@@ -84,7 +93,6 @@ export class OrderService {
           },
           total: orderFinalPrice,
         },
-        select: { id: true },
       });
       for (const orderItem of orderItems) {
         this.prisma.m2m_order_item_order.create({
@@ -98,6 +106,9 @@ export class OrderService {
           },
         });
       }
+      await this.pubSub.publish(NEW_PENDING_ORDER, {
+        pendingOrders: { order, ownerId: restaurant.owner },
+      });
       return {
         ok: true,
       };

@@ -9,6 +9,8 @@ import { GetOrderInput, GetOrderOutput } from "./dtos/get-order.dto";
 import { EditOrderInput, EditOrderOutput } from "./dtos/edit-order.dto";
 import { OrderStatus } from "./entities/order.entity";
 import {
+  NEW_COOKED_ORDER,
+  NEW_ORDER_UPDATE,
   NEW_PENDING_ORDER,
   PUB_SUB,
 } from "src/globalLib/common/common.constants";
@@ -156,11 +158,21 @@ export class OrderService {
           error: "You can't do that",
         };
       }
-      await this.prisma.order.update({
+      const newOrder = await this.prisma.order.update({
         where: { id: orderId },
         data: {
           status: status as any,
         },
+      });
+      if (user.role === UserRole.owner) {
+        if (status === OrderStatus.cooked) {
+          await this.pubSub.publish(NEW_COOKED_ORDER, {
+            cookedOrders: newOrder,
+          });
+        }
+      }
+      await this.pubSub.publish(NEW_ORDER_UPDATE, {
+        orderUpdates: newOrder,
       });
       return {
         ok: true,

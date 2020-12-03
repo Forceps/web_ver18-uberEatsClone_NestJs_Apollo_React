@@ -5,6 +5,7 @@ import { AuthUser } from "src/auth/auth-user.decorator";
 import { Role } from "src/auth/role.decorator";
 import {
   NEW_COOKED_ORDER,
+  NEW_ORDER_UPDATE,
   NEW_PENDING_ORDER,
   PUB_SUB,
 } from "src/globalLib/common/common.constants";
@@ -13,6 +14,7 @@ import { CreateOrderInput, CreateOrderOutput } from "./dtos/create-order.dto";
 import { EditOrderInput, EditOrderOutput } from "./dtos/edit-order.dto";
 import { GetOrderInput, GetOrderOutput } from "./dtos/get-order.dto";
 import { GetOrdersInput, GetOrdersOutput } from "./dtos/get-orders.dto";
+import { OrderUpdatesInput } from "./dtos/order-updates.dto";
 import { order } from "./entities/order.entity";
 import { OrderService } from "./order.service";
 
@@ -70,14 +72,9 @@ export class OrderResolver {
     return this.pubSub.asyncIterator(NEW_PENDING_ORDER);
   }
 
-  @Subscription(() => order, {
-    filter: ({ pendingOrders: { ownerId } }, _, { user }) => {
-      return ownerId === user.id;
-    },
-    resolve: ({ pendingOrders: { order } }) => order,
-  })
-  @Role(["delivery"])
-  cookedOrders(@AuthUser() authUser: user) {
-    return this.pubSub.asyncIterator(NEW_COOKED_ORDER);
+  @Subscription(() => order)
+  @Role(["any"])
+  orderUpdates(@Args("input") orderUpdatesInput: OrderUpdatesInput) {
+    return this.pubSub.asyncIterator(NEW_ORDER_UPDATE);
   }
 }

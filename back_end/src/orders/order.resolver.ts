@@ -4,6 +4,7 @@ import { PubSub } from "graphql-subscriptions";
 import { AuthUser } from "src/auth/auth-user.decorator";
 import { Role } from "src/auth/role.decorator";
 import {
+  NEW_COOKED_ORDER,
   NEW_PENDING_ORDER,
   PUB_SUB,
 } from "src/globalLib/common/common.constants";
@@ -77,6 +78,6 @@ export class OrderResolver {
   })
   @Role(["delivery"])
   cookedOrders(@AuthUser() authUser: user) {
-    return this.pubSub.asyncIterator(NEW_PENDING_ORDER);
+    return this.pubSub.asyncIterator(NEW_COOKED_ORDER);
   }
 }

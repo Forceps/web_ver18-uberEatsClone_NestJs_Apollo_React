@@ -218,16 +218,6 @@ ALTER TABLE `nuber_eats`.`order`
 CHANGE COLUMN `total` `total` FLOAT UNSIGNED NOT NULL DEFAULT 0 ;
 ALTER TABLE `nuber_eats`.`dish` 
 CHANGE COLUMN `price` `price` INT UNSIGNED NOT NULL DEFAULT 0 ;
-
-  
-
-
-
-
-
-
-
-// 2020 - 12 - 1 
-
 ALTER TABLE `nuber_eats`.`order` 
 CHANGE COLUMN `status` `status` ENUM('pending', 'cooking', 'cooked', 'pickedUp', 'delivered') NOT NULL DEFAULT 'pending' ;
+

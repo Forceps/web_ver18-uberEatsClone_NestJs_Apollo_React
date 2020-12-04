@@ -15,6 +15,7 @@ import { EditOrderInput, EditOrderOutput } from "./dtos/edit-order.dto";
 import { GetOrderInput, GetOrderOutput } from "./dtos/get-order.dto";
 import { GetOrdersInput, GetOrdersOutput } from "./dtos/get-orders.dto";
 import { OrderUpdatesInput } from "./dtos/order-updates.dto";
+import { TakeOrderInput, TakeOrderOutput } from "./dtos/take-order.dto";
 import { order } from "./entities/order.entity";
 import { OrderService } from "./order.service";
 
@@ -73,8 +74,38 @@ export class OrderResolver {
   }
 
   @Subscription(() => order)
+  @Role(["delivery"])
+  cookedOrders() {
+    return this.pubSub.asyncIterator(NEW_COOKED_ORDER);
+  }
+
+  @Subscription(() => order, {
+    filter: (
+      { orderUpdates: order }: { orderUpdates: order },
+      { input }: { input: OrderUpdatesInput },
+      { user }: { user: user }
+    ) => {
+      if (
+        order.driver !== user.id &&
+        order.customer !== user.id &&
+        order.restaurant_orderTorestaurant.owner !== user.id
+      ) {
+        return false;
+      }
+      return order.id === input.id;
+    },
+  })
   @Role(["any"])
   orderUpdates(@Args("input") orderUpdatesInput: OrderUpdatesInput) {
     return this.pubSub.asyncIterator(NEW_ORDER_UPDATE);
+  }
+
+  @Mutation(() => TakeOrderOutput)
+  @Role(["delivery"])
+  takeOrder(
+    @AuthUser() authUser: user,
+    @Args("input") takeOrderInput: TakeOrderInput
+  ): Promise<TakeOrderOutput> {
+    return this.orderService.takeOrder(authUser, takeOrderInput);
   }
 }

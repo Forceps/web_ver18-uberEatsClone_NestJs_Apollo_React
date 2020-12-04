@@ -80,7 +80,7 @@ export class UsersService {
     } catch (e) {
       return {
         ok: false,
-        error: e,
+        error: "error catched",
       };
     }
   }
@@ -98,7 +98,7 @@ export class UsersService {
     } catch (e) {
       return {
         ok: false,
-        error: e,
+        error: "error catched",
       };
     }
   }
@@ -129,7 +129,7 @@ export class UsersService {
     } catch (e) {
       return {
         ok: false,
-        error: e,
+        error: "error catched",
       };
     }
   }
@@ -157,7 +157,7 @@ export class UsersService {
         error: "Code does not match",
       };
     } catch (e) {
-      return { ok: false, error: e };
+      return { ok: false, error: "error catched" };
     }
   }
 }

@@ -76,7 +76,7 @@ export class RestaurantService {
       console.log(e);
       return {
         ok: false,
-        error: e,
+        error: "error catched",
       };
     }
   }
@@ -129,7 +129,7 @@ export class RestaurantService {
       console.log(e);
       return {
         ok: false,
-        error: e,
+        error: "error catched",
       };
     }
   }
@@ -172,7 +172,7 @@ export class RestaurantService {
       console.log(e);
       return {
         ok: false,
-        error: e,
+        error: "error catched",
       };
     }
   }
@@ -187,7 +187,7 @@ export class RestaurantService {
     } catch (e) {
       return {
         ok: false,
-        error: e,
+        error: "error catched",
       };
     }
   }
@@ -231,7 +231,7 @@ export class RestaurantService {
     } catch (e) {
       return {
         ok: false,
-        error: e,
+        error: "error catched",
       };
     }
   }
@@ -252,7 +252,7 @@ export class RestaurantService {
     } catch (e) {
       return {
         ok: false,
-        error: e,
+        error: "error catched",
       };
     }
   }
@@ -280,7 +280,7 @@ export class RestaurantService {
     } catch (e) {
       return {
         ok: false,
-        error: e,
+        error: "error catched",
       };
     }
   }
@@ -307,7 +307,7 @@ export class RestaurantService {
     } catch (e) {
       return {
         ok: false,
-        error: e,
+        error: "error catched",
       };
     }
   }
@@ -350,7 +350,7 @@ export class RestaurantService {
     } catch (e) {
       return {
         ok: false,
-        error: e,
+        error: "error catched",
       };
     }
   }
@@ -391,7 +391,7 @@ export class RestaurantService {
     } catch (e) {
       return {
         ok: false,
-        error: e,
+        error: "error catched",
       };
     }
   }
@@ -430,7 +430,7 @@ export class RestaurantService {
     } catch (e) {
       return {
         ok: false,
-        error: e,
+        error: "error catched",
       };
     }
   }

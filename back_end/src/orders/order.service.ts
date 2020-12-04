@@ -15,6 +15,7 @@ import {
   PUB_SUB,
 } from "src/globalLib/common/common.constants";
 import { PubSub } from "graphql-subscriptions";
+import { TakeOrderInput, TakeOrderOutput } from "./dtos/take-order.dto";
 
 @Injectable()
 export class OrderService {
@@ -117,7 +118,7 @@ export class OrderService {
     } catch (e) {
       return {
         ok: false,
-        error: e,
+        error: "error catched",
       };
     }
   }
@@ -180,7 +181,7 @@ export class OrderService {
     } catch (e) {
       return {
         ok: false,
-        error: e,
+        error: "error catched",
       };
     }
   }
@@ -218,7 +219,7 @@ export class OrderService {
     } catch (e) {
       return {
         ok: false,
-        error: e,
+        error: "error catched",
       };
     }
   }
@@ -258,7 +259,48 @@ export class OrderService {
     } catch (e) {
       return {
         ok: false,
-        error: e,
+        error: "error catched",
+      };
+    }
+  }
+
+  async takeOrder(
+    driver: user,
+    { id }: TakeOrderInput
+  ): Promise<TakeOrderOutput> {
+    try {
+      const oldOrder = await this.getOrder(driver, { id });
+      if (!oldOrder.ok) {
+        return {
+          ok: false,
+          error: oldOrder.error,
+        };
+      }
+      if (oldOrder.order.driver) {
+        return {
+          ok: false,
+          error: "This order already has a driver",
+        };
+      }
+      const newOrder = await this.prisma.order.update({
+        where: { id },
+        data: {
+          user_order_driverTouser: {
+            connect: { id: driver.id },
+          },
+        },
+        include: { user_order_driverTouser: true },
+      });
+      await this.pubSub.publish(NEW_ORDER_UPDATE, {
+        orderUpdates: newOrder,
+      });
+      return {
+        ok: true,
+      };
+    } catch {
+      return {
+        ok: false,
+        error: "error catched at 'takeOrder' function in 'order.service.ts'",
       };
     }
   }

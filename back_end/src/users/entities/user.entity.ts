@@ -7,6 +7,7 @@ import {
 import { IsBoolean, IsEmail, IsEnum, IsString, Length } from "class-validator";
 import { CoreEntity } from "src/globalLib/common/entities/core.entity";
 import { order } from "src/orders/entities/order.entity";
+import { payment } from "src/payments/entities/payment.entity";
 import { restaurant } from "src/restaurants/entities/restaurant.entity";
 import { verification } from "./verification.entity";
 
@@ -44,6 +45,9 @@ export class user extends CoreEntity {
 
   @Field(() => [order], { nullable: true })
   order_order_driverTouser?: order[];
+
+  @Field(() => [payment], { nullable: true })
+  payment?: payment[];
 
   @Field(() => [restaurant], { nullable: true })
   restaurant?: restaurant[];

@@ -2,6 +2,7 @@ import { Field, InputType, Int, ObjectType } from "@nestjs/graphql";
 import { IsNumber, IsString, Length } from "class-validator";
 import { CoreEntity } from "src/globalLib/common/entities/core.entity";
 import { order } from "src/orders/entities/order.entity";
+import { payment } from "src/payments/entities/payment.entity";
 import { user } from "src/users/entities/user.entity";
 import { category } from "./category.entity";
 import { dish } from "./dish.entity";
@@ -42,4 +43,7 @@ export class restaurant extends CoreEntity {
 
   @Field(() => [order], { nullable: true })
   orders?: order[];
+
+  @Field(() => [payment], { nullable: true })
+  payment?: payment[];
 }

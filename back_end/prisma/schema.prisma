@@ -20,6 +20,7 @@ model restaurant {
   user                          user      @relation(fields: [owner], references: [id])
   dish                          dish[]
   order                         order[]
+  payment                       payment[]
 
   @@index([category], name: "RestaurantCategory_idx")
   @@index([owner], name: "RestaurantOwner_idx")
@@ -35,6 +36,7 @@ model user {
   role                       user_role     @default(client)
   order_order_customerTouser order[]       @relation("order_customerTouser")
   order_order_driverTouser   order[]       @relation("order_driverTouser")
+  payment                    payment[]
   restaurant                 restaurant[]
   verification               verification?
 }
@@ -99,8 +101,8 @@ model m2m_order_item_order {
   order_item                                  Int?        @map("order-item")
   order                                       Int
   order_m2m_order_item_orderToorder           order       @relation(fields: [order], references: [id])
-  dish                                        dish?       @relation(fields: [order_item], references: [id])
   order_item_m2m_order_item_orderToorder_item order_item? @relation(fields: [order_item], references: [id])
+  dish                                        dish?       @relation(fields: [order_item], references: [id])
 
   @@index([order], name: "M2M_order_idx")
   @@index([order_item], name: "m2m_dish_idx")
@@ -116,6 +118,20 @@ model order_item {
 
   @@index([dish], name: "dishKinds_idx")
   @@map("order-item")
+}
+
+model payment {
+  id            Int        @id @default(autoincrement())
+  createdAt     DateTime?
+  updatedAt     DateTime?
+  transactionId Int
+  userId        Int
+  restaurantId  Int
+  restaurant    restaurant @relation(fields: [restaurantId], references: [id])
+  user          user       @relation(fields: [userId], references: [id])
+
+  @@index([userId], name: "buyer_idx")
+  @@index([restaurantId], name: "restaurantOne_idx")
 }
 
 enum user_role {

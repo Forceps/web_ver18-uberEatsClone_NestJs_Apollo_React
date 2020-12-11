@@ -221,3 +221,39 @@ CHANGE COLUMN `price` `price` INT UNSIGNED NOT NULL DEFAULT 0 ;
 ALTER TABLE `nuber_eats`.`order` 
 CHANGE COLUMN `status` `status` ENUM('pending', 'cooking', 'cooked', 'pickedUp', 'delivered') NOT NULL DEFAULT 'pending' ;
 
+
+
+
+
+
+
+
+
+
+
+// 2020 - 12 - 11
+
+CREATE TABLE `nuber_eats`.`payment` (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `createdAt` DATETIME NULL,
+  `updatedAt` DATETIME NULL,
+  `transactionId` BIGINT UNSIGNED NOT NULL,
+  `userId` BIGINT UNSIGNED NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `buyer_idx` (`userId` ASC) VISIBLE,
+  CONSTRAINT `buyer`
+    FOREIGN KEY (`userId`)
+    REFERENCES `nuber_eats`.`user` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE);
+ALTER TABLE `nuber_eats`.`payment` 
+ADD COLUMN `restaurantId` BIGINT UNSIGNED NOT NULL AFTER `userId`,
+ADD INDEX `restaurantOne_idx` (`restaurantId` ASC) VISIBLE;
+;
+ALTER TABLE `nuber_eats`.`payment` 
+ADD CONSTRAINT `restaurantOne`
+  FOREIGN KEY (`restaurantId`)
+  REFERENCES `nuber_eats`.`restaurant` (`id`)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+

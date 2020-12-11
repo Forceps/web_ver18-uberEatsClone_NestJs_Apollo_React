@@ -99,8 +99,8 @@ model m2m_order_item_order {
   order_item                                  Int?        @map("order-item")
   order                                       Int
   order_m2m_order_item_orderToorder           order       @relation(fields: [order], references: [id])
-  order_item_m2m_order_item_orderToorder_item order_item? @relation(fields: [order_item], references: [id])
   dish                                        dish?       @relation(fields: [order_item], references: [id])
+  order_item_m2m_order_item_orderToorder_item order_item? @relation(fields: [order_item], references: [id])
 
   @@index([order], name: "M2M_order_idx")
   @@index([order_item], name: "m2m_dish_idx")

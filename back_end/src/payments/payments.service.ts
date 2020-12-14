@@ -1,5 +1,4 @@
 import { Injectable } from "@nestjs/common";
-import { Cron } from "@nestjs/schedule";
 import { PrismaService } from "src/globalLib/prisma.service";
 import { user } from "src/users/entities/user.entity";
 import {
@@ -38,6 +37,15 @@ export class PaymentService {
           transactionId,
           user: { connect: { id: owner.id } },
           restaurant: { connect: { id: restaurantId } },
+        },
+      });
+      const date = new Date();
+      date.setDate(date.getDate() + 7);
+      await this.prisma.restaurant.update({
+        where: { id: restaurantId },
+        data: {
+          isPromoted: 1,
+          promotedUntil: date,
         },
       });
       return {

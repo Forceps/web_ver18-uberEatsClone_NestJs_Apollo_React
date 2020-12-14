@@ -213,6 +213,7 @@ export class RestaurantService {
           restaurant: {
             take: 25,
             skip: (page - 1) * 25,
+            orderBy: { isPromoted: "desc" },
           },
         },
       });
@@ -241,6 +242,7 @@ export class RestaurantService {
       const restaurants = await this.prisma.restaurant.findMany({
         take: 25,
         skip: (page - 1) * 25,
+        orderBy: { isPromoted: "desc" },
       });
       const allRestaurantsCount = await this.prisma.restaurant.count();
       return {
@@ -296,6 +298,7 @@ export class RestaurantService {
         },
         take: 25,
         skip: (page - 1) * 25,
+        orderBy: { isPromoted: "desc" },
       });
       const totalResults = restaurants.length;
       return {

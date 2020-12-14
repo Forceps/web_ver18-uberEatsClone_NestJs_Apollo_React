@@ -257,12 +257,6 @@ ADD CONSTRAINT `restaurantOne`
   ON DELETE CASCADE
   ON UPDATE CASCADE;
 
-
-
-
-
-// 2020 - 12 - 14
-
 ALTER TABLE `nuber_eats`.`restaurant` 
 ADD COLUMN `isPromoted` TINYINT UNSIGNED NOT NULL DEFAULT 0 AFTER `owner`,
 ADD COLUMN `promotedUntil` DATETIME NULL AFTER `isPromoted`;

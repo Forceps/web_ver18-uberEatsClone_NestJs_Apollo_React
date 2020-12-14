@@ -1,4 +1,5 @@
 import { Injectable } from "@nestjs/common";
+import { Interval } from "@nestjs/schedule";
 import { PrismaService } from "src/globalLib/prisma.service";
 import { user } from "src/users/entities/user.entity";
 import {
@@ -76,5 +77,19 @@ export class PaymentService {
           "error catched at 'getPayments' function in 'payments.service.ts'",
       };
     }
+  }
+
+  @Interval(5000)
+  checkPromotedRestaurant() {
+    this.prisma.restaurant.updateMany({
+      where: {
+        isPromoted: 1,
+        promotedUntil: { lt: new Date() },
+      },
+      data: {
+        isPromoted: 0,
+        promotedUntil: null,
+      },
+    });
   }
 }

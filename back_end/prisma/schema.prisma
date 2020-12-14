@@ -8,21 +8,23 @@ datasource db {
 }
 
 model restaurant {
-  id                            Int       @id @default(autoincrement())
-  createdAt                     DateTime?
-  updatedAt                     DateTime?
-  name                          String
-  coverImg                      String?
-  address                       String
-  category                      Int?
-  owner                         Int
-  category_categoryTorestaurant category? @relation(fields: [category], references: [id])
-  user                          user      @relation(fields: [owner], references: [id])
-  dish                          dish[]
-  order                         order[]
-  payment                       payment[]
+  id            Int       @id @default(autoincrement())
+  createdAt     DateTime?
+  updatedAt     DateTime?
+  name          String
+  coverImg      String?
+  address       String
+  categoryId    Int?
+  owner         Int
+  isPromoted    Int       @default(0)
+  promotedUntil DateTime?
+  category      category? @relation(fields: [categoryId], references: [id])
+  user          user      @relation(fields: [owner], references: [id])
+  dish          dish[]
+  order         order[]
+  payment       payment[]
 
-  @@index([category], name: "RestaurantCategory_idx")
+  @@index([categoryId], name: "RestaurantCategory_idx")
   @@index([owner], name: "RestaurantOwner_idx")
 }
 
@@ -61,20 +63,20 @@ model category {
 }
 
 model dish {
-  id                          Int                    @id @default(autoincrement())
-  createdAt                   DateTime?
-  updatedAt                   DateTime?
-  name                        String
-  price                       Int                    @default(0)
-  photo                       String?
-  description                 String
-  restaurant                  Int
-  options                     Json?
-  restaurant_dishTorestaurant restaurant             @relation(fields: [restaurant], references: [id])
-  m2m_order_item_order        m2m_order_item_order[]
-  order_item                  order_item[]
+  id                   Int                    @id @default(autoincrement())
+  createdAt            DateTime?
+  updatedAt            DateTime?
+  name                 String
+  price                Int                    @default(0)
+  photo                String?
+  description          String
+  restaurantId         Int
+  options              Json?
+  restaurant           restaurant             @relation(fields: [restaurantId], references: [id])
+  m2m_order_item_order m2m_order_item_order[]
+  order_item           order_item[]
 
-  @@index([restaurant], name: "menu_idx")
+  @@index([restaurantId], name: "menu_idx")
 }
 
 model order {

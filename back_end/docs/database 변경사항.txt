@@ -257,3 +257,32 @@ ADD CONSTRAINT `restaurantOne`
   ON DELETE CASCADE
   ON UPDATE CASCADE;
 
+
+
+
+
+// 2020 - 12 - 14
+
+ALTER TABLE `nuber_eats`.`restaurant` 
+ADD COLUMN `isPromoted` TINYINT UNSIGNED NOT NULL DEFAULT 0 AFTER `owner`,
+ADD COLUMN `promotedUntil` DATETIME NULL AFTER `isPromoted`;
+ALTER TABLE `nuber_eats`.`restaurant` 
+DROP FOREIGN KEY `RestaurantCategory`;
+ALTER TABLE `nuber_eats`.`restaurant` 
+CHANGE COLUMN `category` `categoryId` INT UNSIGNED NULL DEFAULT NULL ;
+ALTER TABLE `nuber_eats`.`restaurant` 
+ADD CONSTRAINT `RestaurantCategory`
+  FOREIGN KEY (`categoryId`)
+  REFERENCES `nuber_eats`.`category` (`id`)
+  ON DELETE SET NULL
+  ON UPDATE CASCADE;
+ALTER TABLE `nuber_eats`.`dish` 
+DROP FOREIGN KEY `menu`;
+ALTER TABLE `nuber_eats`.`dish` 
+CHANGE COLUMN `restaurant` `restaurantId` BIGINT UNSIGNED NOT NULL ;
+ALTER TABLE `nuber_eats`.`dish` 
+ADD CONSTRAINT `menu`
+  FOREIGN KEY (`restaurantId`)
+  REFERENCES `nuber_eats`.`restaurant` (`id`)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;

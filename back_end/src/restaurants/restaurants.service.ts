@@ -62,7 +62,7 @@ export class RestaurantService {
           address,
           coverImg,
           user: { connect: { id: owner.id } },
-          category_categoryTorestaurant: {
+          category: {
             connect: {
               id: category.id,
             },
@@ -113,7 +113,7 @@ export class RestaurantService {
       if (categoryName) {
         data = {
           ...data,
-          category_categoryTorestaurant: {
+          category: {
             connect: await this.getOrCreateCategory(categoryName),
           },
         };
@@ -195,7 +195,7 @@ export class RestaurantService {
   countRestaurant(category: category) {
     return this.prisma.restaurant.count({
       where: {
-        category_categoryTorestaurant: {
+        category: {
           id: category.id,
         },
       },
@@ -339,7 +339,7 @@ export class RestaurantService {
           price,
           description,
           options,
-          restaurant_dishTorestaurant: {
+          restaurant: {
             connect: { id: restaurantId },
           },
         },
@@ -363,7 +363,7 @@ export class RestaurantService {
       const dish = await this.prisma.dish.findOne({
         where: { id: dishId },
         select: {
-          restaurant_dishTorestaurant: {
+          restaurant: {
             select: { owner: true },
           },
         },
@@ -374,7 +374,7 @@ export class RestaurantService {
           error: "Dish not found",
         };
       }
-      if (dish.restaurant_dishTorestaurant.owner !== owner.id) {
+      if (dish.restaurant.owner !== owner.id) {
         return {
           ok: false,
           error: "You are not restaurant owner",
@@ -404,7 +404,7 @@ export class RestaurantService {
       const dish = await this.prisma.dish.findOne({
         where: { id: dishId },
         select: {
-          restaurant_dishTorestaurant: {
+          restaurant: {
             select: { owner: true },
           },
         },
@@ -415,7 +415,7 @@ export class RestaurantService {
           error: "Dish not found",
         };
       }
-      if (dish.restaurant_dishTorestaurant.owner !== owner.id) {
+      if (dish.restaurant.owner !== owner.id) {
         return {
           ok: false,
           error: "You are not restaurant owner",

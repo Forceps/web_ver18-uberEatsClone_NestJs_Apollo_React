@@ -9,7 +9,8 @@ import { PrismaService } from "./globalLib/prisma.service";
 import { AuthModule } from "./auth/auth.module";
 import { OrdersModule } from "./orders/order.module";
 import { CommonModule } from "./globalLib/common/common.module";
-import { PaymentsModule } from './payments/payments.module';
+import { PaymentsModule } from "./payments/payments.module";
+import { ScheduleModule } from "@nestjs/schedule";
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { PaymentsModule } from './payments/payments.module';
     JwtModule.forRoot({
       privateKey: process.env.PRIVATE_KEY,
     }),
+    ScheduleModule.forRoot(),
     RestaurantsModule,
     UsersModule,
     AuthModule,

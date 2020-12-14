@@ -26,14 +26,21 @@ export class restaurant extends CoreEntity {
 
   @Field(() => Int, { nullable: true })
   @IsNumber()
-  category?: number;
+  categoryId?: number;
 
   @Field(() => Int)
   @IsNumber()
   owner: number;
 
+  @Field(() => Int)
+  @IsNumber()
+  isPromoted: number;
+
+  @Field(() => Date, { nullable: true })
+  promotedUntil?: Date;
+
   @Field(() => category, { nullable: true })
-  category_categoryTorestaurant?: category;
+  category?: category;
 
   @Field(() => user, { nullable: true })
   user?: user;

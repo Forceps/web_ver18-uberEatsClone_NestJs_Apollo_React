@@ -1,26 +1,31 @@
-import { Resolver } from "@nestjs/graphql";
+import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
+import { AuthUser } from "src/auth/auth-user.decorator";
+import { Role } from "src/auth/role.decorator";
+import { user, UserRole } from "src/users/entities/user.entity";
+import {
+  CreatePaymentInput,
+  CreatePaymentOutput,
+} from "./dtos/create-payment.dto";
+import { GetPaymentOutput } from "./dtos/get-payments.dto";
 import { payment } from "./entities/payment.entity";
+import { PaymentService } from "./payments.service";
 
 @Resolver(() => payment)
-export class RestaurantResolver {
-  constructor(private readonly PaymentsService: PaymentsService) {}
+export class PaymentResolver {
+  constructor(private readonly PaymentService: PaymentService) {}
 
-  @Mutation(() => CreateRestaurantOutput)
+  @Mutation(() => CreatePaymentOutput)
   @Role([UserRole.owner])
-  createRestaurant(
+  createPayment(
     @AuthUser() authUser: user,
-    @Args("input") createReataurantInput: CreateRestaurantInput
-  ): Promise<CreateRestaurantOutput> {
-    return this.restaurantService.createRestaurant(
-      authUser,
-      createReataurantInput
-    );
+    @Args("input") createPaymentInput: CreatePaymentInput
+  ): Promise<CreatePaymentOutput> {
+    return this.PaymentService.createPayment(authUser, createPaymentInput);
   }
 
-  @Query(() => RestaurantsOutput)
-  restaurants(
-    @Args("input") restaurantsInput: RestaurantsInput
-  ): Promise<RestaurantsOutput> {
-    return this.restaurantService.allRestaurants(restaurantsInput);
+  @Query(() => GetPaymentOutput)
+  @Role([UserRole.owner])
+  getPayment(@AuthUser() authUser: user): Promise<GetPaymentOutput> {
+    return this.PaymentService.getPayments(authUser);
   }
 }

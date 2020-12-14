@@ -52,13 +52,13 @@ export class dish extends CoreEntity {
 
   @Field(() => Int)
   @IsNumber()
-  restaurant: number;
+  restaurantId: number;
 
   @Field(() => [DishOption], { nullable: true })
   options?: JsonValue;
 
   @Field(() => [restaurant], { nullable: true })
-  restaurant_dishTorestaurant?: restaurant;
+  restaurant?: restaurant;
 
   @Field(() => [order_item], { nullable: true })
   order_item?: order_item;

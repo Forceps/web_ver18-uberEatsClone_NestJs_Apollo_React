@@ -1,7 +1,8 @@
 import React from "react";
+import { BrowserRouter } from "react-router-dom";
 
 const LoggedOutRouter = () => {
-  return <div></div>;
+  return <BrowserRouter></BrowserRouter>;
 };
 
 export default LoggedOutRouter;

@@ -1,11 +1,16 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import App from "./App";
+import ContextApply from "./Routes/AppRoot/ContextApply";
 import reportWebVitals from "./reportWebVitals";
+import "./GlobalLib/styles/styles.css";
+import { ApolloProvider } from "@apollo/client";
+import { client } from "./GlobalLib/Apollo/ApolloConnection";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <ApolloProvider client={client}>
+      <ContextApply />
+    </ApolloProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );

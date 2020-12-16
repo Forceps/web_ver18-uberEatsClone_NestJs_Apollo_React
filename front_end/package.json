@@ -24,7 +24,7 @@
     "web-vitals": "^0.2.4"
   },
   "scripts": {
-    "tailwind:build": "tailwind build ./src/GlobalLib/styles/tailwind.css -o ./src/GlobalLib/styles/styles.css",
+    "tailwind:build": "tailwind build ./src/GlobalLib/Styles/tailwind.css -o ./src/GlobalLib/Styles/styles.css",
     "start": "yarn tailwind:build & react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

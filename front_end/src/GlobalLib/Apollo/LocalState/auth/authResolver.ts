@@ -1,3 +1,4 @@
+/* eslint-disable import/no-anonymous-default-export */
 export default {
   Mutation: {
     logUserIn: (_: void, { token }: any, { cache }: any) => {

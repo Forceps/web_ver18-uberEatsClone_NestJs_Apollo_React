@@ -1,8 +1,21 @@
 import React from "react";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
+import CreateAccount from "../pages/create-account";
+import Login from "../pages/login";
 
 const LoggedOutRouter = () => {
-  return <BrowserRouter></BrowserRouter>;
+  return (
+    <BrowserRouter>
+      <Switch>
+        <Route path="/create-account">
+          <CreateAccount />
+        </Route>
+        <Route path="/">
+          <Login />
+        </Route>
+      </Switch>
+    </BrowserRouter>
+  );
 };
 
 export default LoggedOutRouter;

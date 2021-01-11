@@ -3,9 +3,7 @@ import { jwt_header } from "./BackendWay";
 
 const request = async (operation: any) => {
   operation.setContext({
-    headers: {
-      ...jwt_header,
-    },
+    headers: jwt_header,
   });
 };
 export default new ApolloLink(

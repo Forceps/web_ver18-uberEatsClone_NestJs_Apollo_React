@@ -1,12 +1,16 @@
+import { useMutation } from "@apollo/client";
 import React from "react";
 import { useForm } from "react-hook-form";
+import { FormError } from "../Components/form-error";
+import { LOGIN } from "../GlobalLib/Apollo/GraphQL_Client/User/UserCUD";
 
 interface ILoginForm {
-  email?: string;
-  password?: string;
+  email: string;
+  password: string;
 }
 const Login = () => {
   const { register, getValues, errors, handleSubmit } = useForm<ILoginForm>();
+  const [loginMutation] = useMutation(LOGIN);
   const onSubmit = () => {};
   return (
     <div className="h-screen flex items-center justify-center bg-gray-800">
@@ -25,9 +29,7 @@ const Login = () => {
             className="input"
           />
           {errors.email?.message && (
-            <span className="font-medium text-red-500">
-              {errors.email?.message}
-            </span>
+            <FormError errorMessage={errors.email?.message} />
           )}
           <input
             ref={register({ required: "Password is required", minLength: 7 })}
@@ -38,14 +40,10 @@ const Login = () => {
             className="input"
           />
           {errors.password?.message && (
-            <span className="font-medium text-red-500">
-              {errors.password?.message}
-            </span>
+            <FormError errorMessage={errors.password?.message} />
           )}
           {errors.password?.type === "minLength" && (
-            <span className="font-medium text-red-500">
-              Password must be more than 7 chars.
-            </span>
+            <FormError errorMessage="Password must be more than 7 chars." />
           )}
           <button className="btn mt-3">Log In</button>
         </form>

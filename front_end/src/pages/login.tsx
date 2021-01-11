@@ -7,13 +7,20 @@ import {
   loginMutationVariables,
 } from "../GlobalLib/Apollo/ApolloTypes/loginMutation";
 import { LOGIN_MUTATION } from "../GlobalLib/Apollo/GraphQL_Client/User/UserCUD";
+import numberLogo from "../GlobalLib/Assets/Images/uber-eats-logo-1a01872c77.svg";
 
 interface ILoginForm {
   email: string;
   password: string;
 }
 const Login = () => {
-  const { register, getValues, errors, handleSubmit } = useForm<ILoginForm>();
+  const {
+    register,
+    getValues,
+    errors,
+    handleSubmit,
+    formState,
+  } = useForm<ILoginForm>();
   const [loginMutation, { data: loginMutationResult, loading }] = useMutation<
     loginMutation,
     loginMutationVariables
@@ -34,12 +41,15 @@ const Login = () => {
     }
   };
   return (
-    <div className="h-screen flex items-center justify-center bg-gray-800">
-      <div className="bg-white w-full max-w-lg pt-10 pb-7 rounded-lg text-center">
-        <h3 className="text-3xl text-gray-800">Log In</h3>
+    <div className="h-screen flex items-center flex-col mt-10 lg:mt-28">
+      <div className="w-full max-w-screen-sm flex flex-col px-5 items-center">
+        <img alt="logo" src={numberLogo} className="w-52 mb-5" />
+        <h4 className="w-full font-medium text-left text-3xl mb-10">
+          Welcome back
+        </h4>
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="grid gap-3 mt-5 px-5"
+          className="grid gap-3 mt-5 w-full"
         >
           <input
             ref={register({ required: "Email is required" })}
@@ -66,7 +76,7 @@ const Login = () => {
           {errors.password?.type === "minLength" && (
             <FormError errorMessage="Password must be more than 7 chars." />
           )}
-          <button className="btn mt-3">
+          <button className={`btn ${!formState.isValid ? "bg-gray-300" : ""}`}>
             {loading ? "Loading..." : "Log In"}
           </button>
           {loginMutationResult?.login.error && (

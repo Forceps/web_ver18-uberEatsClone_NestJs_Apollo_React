@@ -11,6 +11,7 @@
     "@types/node": "^12.0.0",
     "@types/react": "^16.9.53",
     "@types/react-dom": "^16.9.8",
+    "apollo": "^2.32.0",
     "autoprefixer": "^10.1.0",
     "graphql": "^15.4.0",
     "postcss": "^8.2.1",
@@ -19,6 +20,7 @@
     "react-hook-form": "^6.13.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.1",
+    "rimraf": "^3.0.2",
     "subscriptions-transport-ws": "^0.9.18",
     "tailwindcss": "^2.0.2",
     "typescript": "^4.0.3",
@@ -26,10 +28,11 @@
   },
   "scripts": {
     "tailwind:build": "tailwind build ./src/GlobalLib/Styles/tailwind.css -o ./src/GlobalLib/Styles/styles.css",
-    "start": "yarn tailwind:build & react-scripts start",
+    "start": "yarn apolt & yarn tailwind:build & react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "apolt": "rimraf src/GlobalLib/Apollo/ApolloTypes && apollo client:codegen src/GlobalLib/Apollo/ApolloTypes --target=typescript --outputFlat"
   },
   "eslintConfig": {
     "extends": [

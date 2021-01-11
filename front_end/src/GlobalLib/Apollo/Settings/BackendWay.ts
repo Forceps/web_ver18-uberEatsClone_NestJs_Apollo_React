@@ -4,7 +4,7 @@ import { getMainDefinition } from "@apollo/client/utilities";
 
 const PORT = 4000;
 export const http_BackEnd = `http://127.0.0.1:${PORT}/graphql`;
-export const webSoket_BackEnd = `ws://127.0.0.1:${PORT}`;
+export const webSoket_BackEnd = `ws://127.0.0.1:${PORT}/graphql`;
 export const jwt_header = {
   Authorization: `Bearer ${localStorage.getItem("token")}`,
 };

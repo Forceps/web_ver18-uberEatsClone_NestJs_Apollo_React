@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import reportWebVitals from "./reportWebVitals";
 import "./GlobalLib/Styles/styles.css";
 import { ApolloProvider } from "@apollo/client";
-import { client } from "./GlobalLib/Apollo/ApolloConnection";
+import { client } from "./GlobalLib/Apollo/Settings/ApolloConnection";
 import App from "./App";
 
 ReactDOM.render(

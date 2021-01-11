@@ -2,7 +2,11 @@ import { useMutation } from "@apollo/client";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { FormError } from "../Components/form-error";
-import { LOGIN } from "../GlobalLib/Apollo/GraphQL_Client/User/UserCUD";
+import {
+  loginMutation,
+  loginMutationVariables,
+} from "../GlobalLib/Apollo/ApolloTypes/loginMutation";
+import { LOGIN_MUTATION } from "../GlobalLib/Apollo/GraphQL_Client/User/UserCUD";
 
 interface ILoginForm {
   email: string;
@@ -10,8 +14,25 @@ interface ILoginForm {
 }
 const Login = () => {
   const { register, getValues, errors, handleSubmit } = useForm<ILoginForm>();
-  const [loginMutation] = useMutation(LOGIN);
-  const onSubmit = () => {};
+  const [loginMutation, { data: loginMutationResult, loading }] = useMutation<
+    loginMutation,
+    loginMutationVariables
+  >(LOGIN_MUTATION, {
+    onCompleted: (data: loginMutation) => {
+      const {
+        login: { ok, error, token },
+      } = data;
+      if (ok) {
+        console.log(token);
+      }
+    },
+  });
+  const onSubmit = () => {
+    if (!loading) {
+      const { email, password } = getValues();
+      loginMutation({ variables: { loginInput: { email, password } } });
+    }
+  };
   return (
     <div className="h-screen flex items-center justify-center bg-gray-800">
       <div className="bg-white w-full max-w-lg pt-10 pb-7 rounded-lg text-center">
@@ -22,9 +43,9 @@ const Login = () => {
         >
           <input
             ref={register({ required: "Email is required" })}
-            name="eamil"
+            name="email"
             required
-            type="eamil"
+            type="email"
             placeholder="Email"
             className="input"
           />
@@ -45,7 +66,12 @@ const Login = () => {
           {errors.password?.type === "minLength" && (
             <FormError errorMessage="Password must be more than 7 chars." />
           )}
-          <button className="btn mt-3">Log In</button>
+          <button className="btn mt-3">
+            {loading ? "Loading..." : "Log In"}
+          </button>
+          {loginMutationResult?.login.error && (
+            <FormError errorMessage={loginMutationResult.login.error} />
+          )}
         </form>
       </div>
     </div>

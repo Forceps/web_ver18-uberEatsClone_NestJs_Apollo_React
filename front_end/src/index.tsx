@@ -1,17 +1,20 @@
-import React from "react";
 import ReactDOM from "react-dom";
 import reportWebVitals from "./reportWebVitals";
 import "./GlobalLib/Styles/styles.css";
 import { ApolloProvider } from "@apollo/client";
 import { client } from "./GlobalLib/Apollo/Settings/ApolloConnection";
-import App from "./App";
+import { HelmetProvider } from "react-helmet-async";
+import { App } from "./App";
+import { StrictMode } from "react";
 
 ReactDOM.render(
-  <React.StrictMode>
+  <StrictMode>
     <ApolloProvider client={client}>
-      <App />
+      <HelmetProvider>
+        <App />
+      </HelmetProvider>
     </ApolloProvider>
-  </React.StrictMode>,
+  </StrictMode>,
   document.getElementById("root")
 );
 

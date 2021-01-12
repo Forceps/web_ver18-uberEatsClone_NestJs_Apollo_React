@@ -1,4 +1,5 @@
-import { gql } from "@apollo/client";
+import { gql, useQuery } from "@apollo/client";
+import { meQuery } from "../../ApolloTypes/meQuery";
 
 export const ME_QUERY = gql`
   query meQuery {
@@ -10,3 +11,5 @@ export const ME_QUERY = gql`
     }
   }
 `;
+
+export const useMe = () => useQuery<meQuery>(ME_QUERY);

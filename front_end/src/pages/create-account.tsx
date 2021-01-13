@@ -10,7 +10,7 @@ import {
   createAccountMutationVariables,
 } from "../GlobalLib/Apollo/ApolloTypes/createAccountMutation";
 import { UserRole } from "../GlobalLib/Apollo/ApolloTypes/globalTypes";
-import { CREATE_ACCOUNT_MUTATION } from "../GlobalLib/Apollo/GraphQL_Client/User/UserCUD";
+import { CREATE_ACCOUNT_MUTATION } from "../GlobalLib/Apollo/GraphQL_Client/User/UserM";
 import nuberLogo from "../GlobalLib/Assets/Images/uber-eats-logo-1a01872c77.svg";
 
 interface ICreateAccountForm {

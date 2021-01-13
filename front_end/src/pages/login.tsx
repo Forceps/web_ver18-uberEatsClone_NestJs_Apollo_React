@@ -9,7 +9,7 @@ import {
   loginMutation,
   loginMutationVariables,
 } from "../GlobalLib/Apollo/ApolloTypes/loginMutation";
-import { LOGIN_MUTATION } from "../GlobalLib/Apollo/GraphQL_Client/User/UserCUD";
+import { LOGIN_MUTATION } from "../GlobalLib/Apollo/GraphQL_Client/User/UserM";
 import { LOCALSTORAGE_TOKEN } from "../GlobalLib/Apollo/LocalState/constants";
 import {
   authTokenVar,

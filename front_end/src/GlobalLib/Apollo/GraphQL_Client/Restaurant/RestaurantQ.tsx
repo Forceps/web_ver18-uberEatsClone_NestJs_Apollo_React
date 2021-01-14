@@ -1,5 +1,17 @@
 import { gql } from "@apollo/client";
 
+export const RESTAURANT_FRAGMENT = gql`
+  fragment RestaurantParts on restaurant {
+    id
+    name
+    coverImg
+    category {
+      name
+    }
+    address
+    isPromoted
+  }
+`;
 export const RESTAURANTS_QUERY = gql`
   query restaurantsPageQuery($input: RestaurantsInput!) {
     allCategories {
@@ -19,15 +31,35 @@ export const RESTAURANTS_QUERY = gql`
       totalPages
       totalResults
       results {
-        id
-        name
-        coverImg
-        category {
-          name
-        }
-        address
-        isPromoted
+        ...RestaurantParts
       }
     }
   }
+  ${RESTAURANT_FRAGMENT}
+`;
+export const SEARCH_RESTAURANT = gql`
+  query searchRestaurant($input: SearchRestaurantInput!) {
+    searchRestaurant(input: $input) {
+      ok
+      error
+      totalPages
+      totalResults
+      restaurants {
+        ...RestaurantParts
+      }
+    }
+  }
+  ${RESTAURANT_FRAGMENT}
+`;
+export const RESTAURANT_QUERY = gql`
+  query restaurant($input: RestaurantInput!) {
+    restaurant(input: $input) {
+      ok
+      error
+      restaurant {
+        ...RestaurantParts
+      }
+    }
+  }
+  ${RESTAURANT_FRAGMENT}
 `;

@@ -87,7 +87,10 @@ export class UsersService {
 
   async findById(id: number): Promise<UserProfileOutput> {
     try {
-      const user = await this.prisma.user.findOne({ where: { id } });
+      const user = await this.prisma.user.findOne({
+        where: { id },
+        include: { restaurant: true },
+      });
       if (!user) {
         return {
           ok: false,

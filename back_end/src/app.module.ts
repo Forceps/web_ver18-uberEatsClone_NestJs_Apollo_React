@@ -11,6 +11,7 @@ import { OrdersModule } from "./orders/order.module";
 import { CommonModule } from "./globalLib/common/common.module";
 import { PaymentsModule } from "./payments/payments.module";
 import { ScheduleModule } from "@nestjs/schedule";
+import { UploadsModule } from './uploads/uploads.module';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { ScheduleModule } from "@nestjs/schedule";
     OrdersModule,
     CommonModule,
     PaymentsModule,
+    UploadsModule,
   ],
   controllers: [],
   providers: [PrismaService],

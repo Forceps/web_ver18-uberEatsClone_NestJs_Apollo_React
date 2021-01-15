@@ -33,10 +33,11 @@
     "web-vitals": "^0.2.4"
   },
   "scripts": {
-    "tailwind:build": "tailwind build ./src/GlobalLib/Styles/tailwind.css -o ./src/GlobalLib/Styles/styles.css",
-    "start": "yarn apolt & yarn tailwind:build & react-scripts start",
+    "tawn": "tailwind build ./src/GlobalLib/Styles/tailwind.css -o ./src/GlobalLib/Styles/styles.css",
+    "start": "yarn apolt & yarn tawn & react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "test:cov": "yarn test --coverage --watchAll=false",
     "eject": "react-scripts eject",
     "apolt": "rimraf src/GlobalLib/Apollo/ApolloTypes && apollo client:codegen src/GlobalLib/Apollo/ApolloTypes --target=typescript --outputFlat"
   },
@@ -60,5 +61,12 @@
   },
   "devDependencies": {
     "@types/react-router-dom": "^5.1.6"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "./src/Components/**/*.tsx",
+      "./src/pages/**/*.tsx",
+      "./src/routers/**/*.tsx"
+    ]
   }
 }

@@ -4,7 +4,7 @@ import "./GlobalLib/Styles/styles.css";
 import { ApolloProvider } from "@apollo/client";
 import { client } from "./GlobalLib/Apollo/Settings/ApolloConnection";
 import { HelmetProvider } from "react-helmet-async";
-import { App } from "./App";
+import { App } from "./Routers/app";
 import { StrictMode } from "react";
 
 ReactDOM.render(

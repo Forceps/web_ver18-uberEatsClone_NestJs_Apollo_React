@@ -56,7 +56,7 @@ export class RestaurantService {
   ): Promise<CreateRestaurantOutput> {
     try {
       const category = await this.getOrCreateCategory(categoryName);
-      await this.prisma.restaurant.create({
+      const savedRestaurant = await this.prisma.restaurant.create({
         data: {
           name,
           address,
@@ -68,9 +68,11 @@ export class RestaurantService {
             },
           },
         },
+        select: { id: true },
       });
       return {
         ok: true,
+        restaurantId: savedRestaurant.id,
       };
     } catch (e) {
       console.log(e);
@@ -277,7 +279,7 @@ export class RestaurantService {
       }
       return {
         ok: true,
-        restaurant,
+        restaurant: restaurant as any,
       };
     } catch (e) {
       return {
@@ -341,7 +343,7 @@ export class RestaurantService {
           name,
           price,
           description,
-          options,
+          options: options as any,
           restaurant: {
             connect: { id: restaurantId },
           },
@@ -383,7 +385,12 @@ export class RestaurantService {
           error: "You are not restaurant owner",
         };
       }
-      let data: dishUpdateInput = { name, options, price, description };
+      let data: dishUpdateInput = {
+        name,
+        options: options as any,
+        price,
+        description,
+      };
       await this.prisma.dish.update({
         where: { id: dishId },
         data,

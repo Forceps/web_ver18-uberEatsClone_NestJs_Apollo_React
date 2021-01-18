@@ -9,6 +9,7 @@ import { Restaurant } from "../Pages/client/restaurant";
 import { Restaurants } from "../Pages/client/restaurants";
 import { Search } from "../Pages/client/search";
 import { AddRestaurant } from "../Pages/owner/add-restaurants";
+import { MyRestaurant } from "../Pages/owner/my-restaurant";
 import { MyRestaurants } from "../Pages/owner/my-restaurants";
 import { ConfirmEmail } from "../Pages/user/confirm-email";
 import { EditProfile } from "../Pages/user/edit-profile";
@@ -20,6 +21,7 @@ const RouteSwitchByRole = ({ Role }: { Role: UserRole }) => {
         <>
           <Route path="/" exact component={MyRestaurants} />
           <Route path="/add-restaurant" exact component={AddRestaurant} />
+          <Route path="/restaurants/:id" exact component={MyRestaurant} />
         </>
       );
     default:

@@ -22,7 +22,7 @@ export class DishOption {
   @Field(() => String)
   @IsString()
   name: string;
-  @Field(() => [String], { nullable: true })
+  @Field(() => [DishChoice], { nullable: true })
   choice?: DishChoice[];
   @Field(() => Number, { nullable: true })
   @IsNumber()
@@ -55,7 +55,7 @@ export class dish extends CoreEntity {
   restaurantId: number;
 
   @Field(() => [DishOption], { nullable: true })
-  options?: JsonValue;
+  options?: DishOption;
 
   @Field(() => [restaurant], { nullable: true })
   restaurant?: restaurant;

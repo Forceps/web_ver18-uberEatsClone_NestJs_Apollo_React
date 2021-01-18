@@ -5,6 +5,7 @@ export const CREATE_RESTAURANT_MUTATION = gql`
     createRestaurant(input: $input) {
       error
       ok
+      restaurantId
     }
   }
 `;

@@ -11,7 +11,7 @@ import { OrdersModule } from "./orders/order.module";
 import { CommonModule } from "./globalLib/common/common.module";
 import { PaymentsModule } from "./payments/payments.module";
 import { ScheduleModule } from "@nestjs/schedule";
-import { UploadsModule } from './uploads/uploads.module';
+import { UploadsModule } from "./uploads/uploads.module";
 
 @Module({
   imports: [
@@ -22,6 +22,9 @@ import { UploadsModule } from './uploads/uploads.module';
       validationSchema: Joi.object({
         NODE_ENV: Joi.string().valid("dev", "prod", "test").required(),
         PRIVATE_KEY: Joi.string().required(),
+        AWS_S3_nestUpload_AccessKey: Joi.string().required(),
+        AWS_S3_nestUpload_SecretKey: Joi.string().required(),
+        AWS_S3_nestUpload_BucketName: Joi.string().required(),
       }),
     }),
     GraphQLModule.forRoot({

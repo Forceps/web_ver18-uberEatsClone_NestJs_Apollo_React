@@ -1,4 +1,5 @@
 import { gql } from "@apollo/client";
+import { DISH_FRAGMENT } from "../Dish/DishQ";
 
 export const RESTAURANT_FRAGMENT = gql`
   fragment RestaurantParts on restaurant {
@@ -58,8 +59,12 @@ export const RESTAURANT_QUERY = gql`
       error
       restaurant {
         ...RestaurantParts
+        dish {
+          ...DishParts
+        }
       }
     }
   }
   ${RESTAURANT_FRAGMENT}
+  ${DISH_FRAGMENT}
 `;

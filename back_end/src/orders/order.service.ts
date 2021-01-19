@@ -96,6 +96,7 @@ export class OrderService {
           },
           total: orderFinalPrice,
         },
+        select: { id: true },
       });
       for (const orderItem of orderItems) {
         this.prisma.m2m_order_item_order.create({
@@ -114,6 +115,7 @@ export class OrderService {
       });
       return {
         ok: true,
+        orderId: order.id,
       };
     } catch (e) {
       return {

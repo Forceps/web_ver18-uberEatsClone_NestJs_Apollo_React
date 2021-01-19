@@ -14,6 +14,29 @@ export interface restaurant_restaurant_restaurant_category {
   name: string;
 }
 
+export interface restaurant_restaurant_restaurant_dish_options_choice {
+  __typename: "DishChoice";
+  name: string;
+  extra: number | null;
+}
+
+export interface restaurant_restaurant_restaurant_dish_options {
+  __typename: "DishOption";
+  name: string;
+  extra: number | null;
+  choice: restaurant_restaurant_restaurant_dish_options_choice[] | null;
+}
+
+export interface restaurant_restaurant_restaurant_dish {
+  __typename: "dish";
+  id: number;
+  name: string;
+  price: number;
+  photo: string | null;
+  description: string;
+  options: restaurant_restaurant_restaurant_dish_options[] | null;
+}
+
 export interface restaurant_restaurant_restaurant {
   __typename: "restaurant";
   id: number;
@@ -22,6 +45,7 @@ export interface restaurant_restaurant_restaurant {
   category: restaurant_restaurant_restaurant_category | null;
   address: string;
   isPromoted: number;
+  dish: restaurant_restaurant_restaurant_dish[] | null;
 }
 
 export interface restaurant_restaurant {

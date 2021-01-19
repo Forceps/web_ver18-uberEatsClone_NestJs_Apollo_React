@@ -15,7 +15,7 @@ import { MyRestaurants } from "../Pages/owner/my-restaurants";
 import { ConfirmEmail } from "../Pages/user/confirm-email";
 import { EditProfile } from "../Pages/user/edit-profile";
 
-const RouteSwitchByRole = ({ Role }: { Role: UserRole }) => {
+const RouteSwitchByUserRole = ({ Role }: { Role: UserRole }) => {
   switch (Role) {
     case "owner":
       return (
@@ -23,7 +23,10 @@ const RouteSwitchByRole = ({ Role }: { Role: UserRole }) => {
           <Route path="/" exact component={MyRestaurants} />
           <Route path="/add-restaurant" exact component={AddRestaurant} />
           <Route path="/restaurants/:id" exact component={MyRestaurant} />
-          <Route path="/restaurants/:id/add-dish" exact component={AddDish} />
+          <Route
+            path="/restaurants/:restaurantId/add-dish"
+            component={AddDish}
+          />
         </>
       );
     default:
@@ -43,7 +46,7 @@ export const LoggedInRouter = () => {
     <BrowserRouter>
       <Header />
       <Switch>
-        <RouteSwitchByRole Role={data.me.role} />
+        <RouteSwitchByUserRole Role={data.me.role} />
         <Route path="/confirm" exact component={ConfirmEmail} />
         <Route path="/edit-profile" exact component={EditProfile} />
         <Route component={NotFound} />

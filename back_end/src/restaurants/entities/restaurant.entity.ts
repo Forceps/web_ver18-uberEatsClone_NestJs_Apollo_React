@@ -49,7 +49,7 @@ export class restaurant extends CoreEntity {
   dish?: dish[];
 
   @Field(() => [order], { nullable: true })
-  orders?: order[];
+  order?: order[];
 
   @Field(() => [payment], { nullable: true })
   payment?: payment[];

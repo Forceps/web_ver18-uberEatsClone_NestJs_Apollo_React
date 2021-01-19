@@ -37,6 +37,13 @@ export interface meQuery_me_restaurant_dish {
   options: meQuery_me_restaurant_dish_options[] | null;
 }
 
+export interface meQuery_me_restaurant_order {
+  __typename: "order";
+  id: number;
+  createdAt: any | null;
+  total: number;
+}
+
 export interface meQuery_me_restaurant {
   __typename: "restaurant";
   id: number;
@@ -46,6 +53,7 @@ export interface meQuery_me_restaurant {
   address: string;
   isPromoted: number;
   dish: meQuery_me_restaurant_dish[] | null;
+  order: meQuery_me_restaurant_order[] | null;
 }
 
 export interface meQuery_me {

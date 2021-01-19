@@ -89,7 +89,7 @@ export class UsersService {
     try {
       const user = await this.prisma.user.findOne({
         where: { id },
-        include: { restaurant: { include: { dish: true } } },
+        include: { restaurant: { include: { dish: true, order: true } } },
       });
       if (!user) {
         return {

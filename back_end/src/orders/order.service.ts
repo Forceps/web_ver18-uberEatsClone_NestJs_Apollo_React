@@ -65,7 +65,7 @@ export class OrderService {
             if (dishOption.extra) {
               dishFinalPrice = dishFinalPrice + dishOption.extra;
             } else {
-              const dishOptionChoice = dishOption.choices.find(
+              const dishOptionChoice = dishOption.choices?.find(
                 (optionChoice) => optionChoice.name === itemOption.choice
               );
               if (dishOptionChoice && dishOptionChoice.extra) {
@@ -96,7 +96,6 @@ export class OrderService {
           },
           total: orderFinalPrice,
         },
-        select: { id: true },
       });
       for (const orderItem of orderItems) {
         this.prisma.m2m_order_item_order.create({
@@ -234,7 +233,9 @@ export class OrderService {
       const order = await this.prisma.order.findOne({
         where: { id: orderId },
         include: {
-          restaurant_orderTorestaurant: { select: { owner: true } },
+          user_order_customerTouser: { select: { email: true } },
+          user_order_driverTouser: { select: { email: true } },
+          restaurant_orderTorestaurant: { select: { owner: true, name: true } },
         },
       });
       if (!order) {

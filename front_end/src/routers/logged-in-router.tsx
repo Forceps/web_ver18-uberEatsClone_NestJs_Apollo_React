@@ -14,6 +14,7 @@ import { MyRestaurant } from "../Pages/owner/my-restaurant";
 import { MyRestaurants } from "../Pages/owner/my-restaurants";
 import { ConfirmEmail } from "../Pages/user/confirm-email";
 import { EditProfile } from "../Pages/user/edit-profile";
+import { Order } from "../Pages/user/order";
 
 const RouteSwitchByUserRole = ({ Role }: { Role: UserRole }) => {
   switch (Role) {
@@ -49,6 +50,7 @@ export const LoggedInRouter = () => {
         <RouteSwitchByUserRole Role={data.me.role} />
         <Route path="/confirm" exact component={ConfirmEmail} />
         <Route path="/edit-profile" exact component={EditProfile} />
+        <Route path="/orders/:id" component={Order} />
         <Route component={NotFound} />
       </Switch>
     </BrowserRouter>

@@ -8,6 +8,6 @@ export class GetOrderInput extends PickType(orderE, ["id"]) {}
 
 @ObjectType()
 export class GetOrderOutput extends CoreOutput {
-  @Field(() => [orderE], { nullable: true })
+  @Field(() => orderE, { nullable: true })
   order?: order;
 }

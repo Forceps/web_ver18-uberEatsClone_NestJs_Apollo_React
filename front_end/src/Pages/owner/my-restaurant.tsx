@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Helmet } from "react-helmet-async";
-import { Link, useParams } from "react-router-dom";
+import { Link, useHistory, useParams } from "react-router-dom";
 import { Dish } from "../../Components/dish";
 import { useMe } from "../../GlobalLib/Apollo/GraphQL_Client/User/UserQ";
 import {
@@ -11,6 +12,10 @@ import {
   VictoryTooltip,
   VictoryVoronoiContainer,
 } from "victory";
+import { useSubscription } from "@apollo/client";
+import { useEffect } from "react";
+import { PENDING_ORDERS_SUBSCRIPTION } from "../../GlobalLib/Apollo/GraphQL_Client/Order/OrderS";
+import { pendingOrders } from "../../GlobalLib/Apollo/ApolloTypes/pendingOrders";
 
 interface IParams {
   id: string;
@@ -19,7 +24,15 @@ export const MyRestaurant = () => {
   const { id } = useParams<IParams>();
   const { data } = useMe();
   const dataTarget = data?.me.restaurant?.filter((elem) => elem.id === +id)[0];
-  console.log(dataTarget);
+  const { data: subscriptionData } = useSubscription<pendingOrders>(
+    PENDING_ORDERS_SUBSCRIPTION
+  );
+  const history = useHistory();
+  useEffect(() => {
+    if (subscriptionData?.pendingOrders.id) {
+      history.push(`/orders/${subscriptionData.pendingOrders.id}`);
+    }
+  }, [subscriptionData]);
   return (
     <div>
       <Helmet>

@@ -96,6 +96,11 @@ export class OrderService {
           },
           total: orderFinalPrice,
         },
+        include: {
+          user_order_customerTouser: { select: { email: true } },
+          user_order_driverTouser: { select: { email: true } },
+          restaurant_orderTorestaurant: { select: { owner: true, name: true } },
+        },
       });
       for (const orderItem of orderItems) {
         this.prisma.m2m_order_item_order.create({
@@ -164,6 +169,11 @@ export class OrderService {
         where: { id: orderId },
         data: {
           status: status as any,
+        },
+        include: {
+          user_order_customerTouser: { select: { email: true } },
+          user_order_driverTouser: { select: { email: true } },
+          restaurant_orderTorestaurant: { select: { owner: true, name: true } },
         },
       });
       if (user.role === UserRole.owner) {
@@ -292,7 +302,11 @@ export class OrderService {
             connect: { id: driver.id },
           },
         },
-        include: { user_order_driverTouser: true },
+        include: {
+          user_order_customerTouser: { select: { email: true } },
+          user_order_driverTouser: true,
+          restaurant_orderTorestaurant: { select: { owner: true, name: true } },
+        },
       });
       await this.pubSub.publish(NEW_ORDER_UPDATE, {
         orderUpdates: newOrder,

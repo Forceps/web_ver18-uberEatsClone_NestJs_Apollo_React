@@ -8,6 +8,7 @@ import { Category } from "../Pages/client/category";
 import { Restaurant } from "../Pages/client/restaurant";
 import { Restaurants } from "../Pages/client/restaurants";
 import { Search } from "../Pages/client/search";
+import { Dashboard } from "../Pages/driver/dashboard";
 import { AddDish } from "../Pages/owner/add-dish";
 import { AddRestaurant } from "../Pages/owner/add-restaurants";
 import { MyRestaurant } from "../Pages/owner/my-restaurant";
@@ -18,7 +19,7 @@ import { Order } from "../Pages/user/order";
 
 const RouteSwitchByUserRole = ({ Role }: { Role: UserRole }) => {
   switch (Role) {
-    case "owner":
+    case UserRole.owner:
       return (
         <>
           <Route path="/" exact component={MyRestaurants} />
@@ -28,6 +29,12 @@ const RouteSwitchByUserRole = ({ Role }: { Role: UserRole }) => {
             path="/restaurants/:restaurantId/add-dish"
             component={AddDish}
           />
+        </>
+      );
+    case UserRole.delivery:
+      return (
+        <>
+          <Route path="/" exact component={Dashboard} />
         </>
       );
     default:
@@ -47,10 +54,10 @@ export const LoggedInRouter = () => {
     <BrowserRouter>
       <Header />
       <Switch>
-        <RouteSwitchByUserRole Role={data.me.role} />
         <Route path="/confirm" exact component={ConfirmEmail} />
         <Route path="/edit-profile" exact component={EditProfile} />
-        <Route path="/orders/:id" component={Order} />
+        <Route path="/orders/:id" exact component={Order} />
+        <RouteSwitchByUserRole Role={data.me.role} />
         <Route component={NotFound} />
       </Switch>
     </BrowserRouter>
